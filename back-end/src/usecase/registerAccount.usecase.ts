@@ -1,36 +1,51 @@
 import { genSaltSync, hashSync } from "bcrypt";
-import { sign } from "jsonwebtoken";
 import { prisma } from "../../prisma";
+import { NewTokenJWTProvider } from "../providers/newTokenJWT";
 
 export class RegisterAccountUseCase {
-    async execute({ name, email, password } : { name: string; email: string; password: string }) {
+  async execute({
+    name,
+    email,
+    password,
+  }: {
+    name: string;
+    email: string;
+    password: string;
+  }) {
+    if (!name || !password || !email) throw new Error("Body is missing");
 
-        if(!name || !password || !email) throw new Error('Body is missing');
+    const userExists = await prisma.users.findUnique({
+      where: {
+        email,
+      },
+    });
 
-        const salt = genSaltSync(10)
-        const passwordHashed = hashSync(password, salt)
-        const user = await prisma.users.create({
-            data: {
-                email,
-                name,
-                password: passwordHashed,
-                role: 'teacher'
-            }
-        })
+    if (userExists?.id) throw new Error("E-mail already exists");
 
-        const TOKEN_SECRET = process.env.TOKEN_SECRET as string
+    const salt = genSaltSync(10);
+    const passwordHashed = hashSync(password, salt);
+    const user = await prisma.users.create({
+      data: {
+        email,
+        name,
+        password: passwordHashed,
+        role: "teacher",
+      },
+    });
 
-        if(!TOKEN_SECRET) throw new Error('Unexpected Error')
+    const tokenJWT = new NewTokenJWTProvider().execute(user.id);
+    const expiresIn = new Date(new Date().getTime() + 2629746000).toISOString();
+    const refreshToken = await prisma.refreshToken.create({
+      data: {
+        expiresIn,
+        user_id: user.id,
+      },
+    });
 
-        const jwtToken = sign({
-            email: user.email,
-            id: user.id,
-        }, TOKEN_SECRET, {
-            expiresIn: "1d"
-        })
-
-        return {
-            'access-token': jwtToken
-        }
-    }
-} 
+    return {
+      accessToken: tokenJWT,
+      refreshToken: refreshToken.id,
+      expiresIn,
+    };
+  }
+}

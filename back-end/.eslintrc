@@ -1,0 +1,10 @@
+{
+    "extends": ["@freitasdev/eslint-config/node"],
+    "rules": {
+        "no-useless-constructor": "off",
+        "prettier/prettier": [
+            "error",
+            { "endOfLine": "auto" }
+          ]
+    }
+}

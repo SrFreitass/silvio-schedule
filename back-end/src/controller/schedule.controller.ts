@@ -1,45 +1,48 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { GetScheduleByRoomUseCase } from "../usecase/getScheduleByRoom.usecase";
-import { toScheduleUseCase } from "../usecase/toSchedule.usecase";
+import { GetScheduleByRoomUseCase } from "../usecase/GetScheduleByRoom.usecase";
+import { ToScheduleUseCase } from "../usecase/toSchedule.usecase";
 
 class ScheduleController {
-    async toSchedule(req: FastifyRequest, reply: FastifyReply) {
-        try {
-            const body = req.body as { room: string; teacherId: string; date: Date }
-            const useCase = new toScheduleUseCase()
-            const output = await useCase.execute({ ...body })
-            return {
-                data: output
-            }
-        } catch (error) {
-            console.error(error);
-            reply.status(500)
-            return {
-                statusCode: 500,
-                message: 'Unexpected Error',
-            }
-        }
+  async toSchedule(req: FastifyRequest, reply: FastifyReply) {
+    try {
+      const userId = req.headers.userId as string;
+      const body = req.body as {
+        roomId: string;
+        date: Date;
+      };
+      const useCase = new ToScheduleUseCase();
+      const output = await useCase.execute({ ...body, teacherId: userId });
+      return {
+        data: output,
+      };
+    } catch (error) {
+      reply.status(500);
+      return {
+        statusCode: 500,
+        message: error instanceof Error ? error.message : "Unexpected Error",
+      };
     }
+  }
 
-    async getScheduleByRoom(req: FastifyRequest, reply: FastifyReply) {
-        try {
-            const params = req.params as { room: string; }
-            const useCase = new GetScheduleByRoomUseCase()
-            const output = await useCase.execute({ ...params })
-            return {
-                statusCode: 200,
-                message: 'OK',
-                data: output
-            }
-        } catch (error) {
-            console.error(error);
-            reply.status(500)
-            return {
-                statusCode: 500,
-                message: 'Unexpected Error',
-            }
-        }
+  async getScheduleByRoom(req: FastifyRequest, reply: FastifyReply) {
+    try {
+      const params = req.params as { roomId: string };
+      const useCase = new GetScheduleByRoomUseCase();
+      const output = await useCase.execute({ ...params });
+      return {
+        statusCode: 200,
+        message: "OK",
+        data: output,
+      };
+    } catch (error) {
+      console.error(error);
+      reply.status(500);
+      return {
+        statusCode: 500,
+        message: error instanceof Error ? error.message : "Unexpected Error",
+      };
     }
+  }
 }
 
-export default new ScheduleController()
+export default new ScheduleController();

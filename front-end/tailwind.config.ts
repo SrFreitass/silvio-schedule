@@ -1,4 +1,4 @@
-import type { Config } from 'tailwindcss';
+import { Config } from 'tailwind-merge';
 
 const config = {
   darkMode: ['class'],
@@ -59,6 +59,13 @@ const config = {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      width: {
+        row: 'calc(100% + 127px)',
+      },
+
+      height: {
+        column: 'calc(100% + 50px)',
+      },
       keyframes: {
         'accordion-down': {
           from: { height: '0' },
@@ -68,8 +75,18 @@ const config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
+        'open-aside': {
+          from: { transform: 'translateX(100%)' },
+          to: { transform: 'translateX(0%)' },
+        },
+        'close-aside': {
+          from: { transform: 'translateX(0%)' },
+          to: { transform: 'translateX(100%)' },
+        },
       },
       animation: {
+        aside: 'open-aside 0.2s ease-out',
+        'close-aside': 'close-aside 0.3s ease-out',
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },

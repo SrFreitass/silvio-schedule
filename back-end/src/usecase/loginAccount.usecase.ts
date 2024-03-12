@@ -1,36 +1,42 @@
 import { compareSync } from "bcrypt";
-import { sign } from "jsonwebtoken";
 import { prisma } from "../../prisma";
+import { RefreshTokenUseCase } from "./refreshToken.usecase";
 
- 
 export class LoginAccountUseCase {
-    async execute({ email, password }: { email: string; password: string }) {
-        if( !password || !email) throw new Error('Body is missing');
+  async execute({ email, password }: { email: string; password: string }) {
+    if (!password || !email) throw new Error("Body is missing");
 
-        const TOKEN_SECRET = process.env.TOKEN_SECRET as string
+    const TOKEN_SECRET = process.env.TOKEN_SECRET as string;
 
-        if(!TOKEN_SECRET) throw new Error('Unexpected Error')
+    if (!TOKEN_SECRET) throw new Error("Unexpected Error");
 
-        const user = await prisma.users.findUnique({
-            where: {
-                email
-            },
-        })
+    const user = await prisma.users.findUnique({
+      where: {
+        email,
+      },
+      include: {
+        refreshToken: {},
+      },
+    });
 
-        if(!user) throw new Error('EMAIL_INVALID')
+    if (!user) throw new Error("E-mail or password invalid");
 
-        compareSync(password, user?.password)
+    const userPassword = compareSync(password, user?.password);
 
-        const jwtToken = sign({
-            email: user.email,
-            id: user.id,
-        }, TOKEN_SECRET, {
-            expiresIn: "1d"
-        })
+    if (!userPassword) throw new Error("E-mail or password invalid");
 
-        return {
-            'x-access-token': jwtToken,
-        }
-        
-    }
+    if (!user.refreshToken?.id) throw new Error("Unexpected Error");
+
+    const refreshTokenUseCase = new RefreshTokenUseCase();
+    const newTokens = await refreshTokenUseCase.execute({
+      lastRefreshToken: user.refreshToken.id,
+      userId: user.id,
+    });
+
+    return {
+      accessToken: newTokens.accessToken,
+      refreshToken: newTokens.refreshToken,
+      expiresIn: newTokens.expiresIn,
+    };
+  }
 }

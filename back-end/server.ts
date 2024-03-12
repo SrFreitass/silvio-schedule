@@ -1,16 +1,16 @@
-import cors from '@fastify/cors';
+import cors from "@fastify/cors";
 import fastify from "fastify";
 import { Router } from "./src/router/router";
 
-const app = fastify()
+const app = fastify();
 
-new Router(app, '/api/v1')
+new Router(app, "/api/v1");
 
 app.register(cors, {
-    origin: '*',
-    methods: ['POST', 'GET', 'DELETE', 'PATCH', 'PUT']
-})
+  origin: "*",
+  methods: ["POST", "GET", "DELETE", "PATCH", "PUT"],
+});
 
 app.listen({
-    port: 8081
-})
+  port: 8081,
+});

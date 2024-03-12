@@ -1,7 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+
+front-end/node_modules
+back-end/node_modules
+back-end/.env
+front-end/.env
 /.pnp
 .pnp.js
 .yarn/install-state.gz
@@ -10,7 +14,7 @@
 /coverage
 
 # next.js
-/.next/
+front-end/.next/
 /out/
 
 # production

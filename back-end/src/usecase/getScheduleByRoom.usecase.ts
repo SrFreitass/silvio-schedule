@@ -1,15 +1,21 @@
 import { prisma } from "../../prisma";
 
 export class GetScheduleByRoomUseCase {
-    async execute({ room }: { room: string}) {
-        if(!room) throw new Error('Body is missing')
+  async execute({ roomId }: { roomId: string }) {
+    if (!roomId) throw new Error("Params is missing");
+    const scheduleByRoom = await prisma.schedule.findMany({
+      where: {
+        room_id: roomId,
+      },
+      include: {
+        teacher: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
 
-        const scheduleByRoom = await prisma.schedule.findMany({
-            where: {
-                room,
-            }
-        })
-
-        return scheduleByRoom;
-    }
+    return scheduleByRoom;
+  }
 }

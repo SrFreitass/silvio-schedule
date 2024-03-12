@@ -13,7 +13,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Users {
+model users {
   id  String @id @default(uuid())
   createdAt DateTime @default(now())
   role String
@@ -21,12 +21,31 @@ model Users {
   email String @unique
   password String
   Schedule Schedule[]
+  refreshToken refreshToken?
+  @@map("users")
+}
+
+model refreshToken {
+  id String @id @default(uuid())
+  expiresIn DateTime
+  user_id  String  @unique
+  user users @relation(fields: [user_id], references: [id]) 
+  @@map("refresh_token")
+}
+
+model rooms {
+  id String @id @default(uuid())
+  name String @unique
+  Schedule Schedule[]
 }
 
 model Schedule {
   id  String @id @default(uuid())
-  room String
-  date DateTime
-  teacher_id String 
-  teacher Users @relation(fields: [teacher_id], references: [id])
+  date DateTime 
+  teacher_id String
+  room_id String 
+  teacher users @relation(fields: [teacher_id], references: [id])
+  schedule rooms @relation(fields: [room_id], references: [id])
+  
+  @@map("schedule")
 }

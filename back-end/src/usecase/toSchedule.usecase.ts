@@ -1,21 +1,43 @@
 import { prisma } from "../../prisma";
 
-const rooms = {'STE3': true, 'STE2': true, 'LABORÁTORIO DE MATEMÁTICA': true,  'LABORÁTORIO DE QUÍMICA': true}
+export class ToScheduleUseCase {
+  async execute({
+    date,
+    roomId,
+    teacherId,
+  }: {
+    roomId: string;
+    teacherId: string;
+    date: string;
+  }) {
+    if (!date || !roomId || !teacherId) throw new Error("Body is missing");
 
-export class toScheduleUseCase {
-    async execute({ date, room, teacherId}: { room: string; teacherId: string; date: Date }) {
-        if(!date || !room || !teacherId) throw new Error('Body is missing');
+    const itemsSchedule = await prisma.schedule.findMany({
+      where: {
+        AND: [
+          {
+            room_id: roomId,
+          },
+          {
+            date,
+          },
+        ],
+      },
+    });
 
-        if(!rooms[room.toUpperCase() as keyof typeof rooms]) throw new Error('Room is invalid');
+    console.log(itemsSchedule);
 
-        const item = await prisma.schedule.create({
-            data: {
-                date,
-                room: room.toUpperCase(), 
-                teacher_id: teacherId
-            }
-        })
+    if (itemsSchedule.length > 0)
+      throw new Error("This room is already reserved at this time");
 
-        return item;
-    }
+    const item = await prisma.schedule.create({
+      data: {
+        date,
+        teacher_id: teacherId,
+        room_id: roomId,
+      },
+    });
+
+    return item;
+  }
 }
