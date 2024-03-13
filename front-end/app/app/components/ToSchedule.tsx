@@ -5,6 +5,7 @@ import dayjs from 'dayjs';
 import { Dispatch, MouseEvent } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { SiGoogleclassroom } from 'react-icons/si';
+import roomsId from '../roomsId.json';
 
 interface ToScheduleProps {
   setActiveAside: Dispatch<boolean>;
@@ -32,10 +33,11 @@ export function ToSchedule({ setActiveAside, date, room }: ToScheduleProps) {
       .subtract(3, 'hours')
       .toISOString();
 
-    console.log(dateToSchedule);
+    const roomId = roomsId[room as keyof typeof roomsId] || '';
+
     const item = await postSchedule({
       date: dateToSchedule,
-      roomId: 'c328550d-6f2a-4d63-91c0-dec85955ecce',
+      roomId,
     });
 
     console.log(item);

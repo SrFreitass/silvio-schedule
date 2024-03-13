@@ -4,7 +4,7 @@ import { IscheduleRoomData } from '@/models/scheduleRoom.interface';
 import { ITeacherData } from '@/models/teacher.interface';
 import { RouterPrivate } from '@/router/RouterPrivate';
 
-import { jwtDecode } from 'jwt-decode';
+import { tokens } from '@/providers/TokensSession';
 import { useEffect, useState } from 'react';
 import { getScheduleByRoom } from '../http/get.scheduleByRoom';
 import { getTeacher } from '../http/get.teacher';
@@ -33,39 +33,32 @@ export default function MainPage() {
     dateStyle: 'full',
   });
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { accessToken, refreshToken } = JSON.parse(
-          localStorage.getItem('tokens') || '{}',
-        ) as {
-          accessToken: string;
-          refreshToken: string;
-        };
-        const { userId } = jwtDecode<{ userId: string }>(accessToken);
-        const currentTeacher = await getTeacher({
-          userId,
-          accessToken,
-        });
+  const fetchSchedule = async () => {
+    const currentSchedule = await getScheduleByRoom(
+      roomsId[room as keyof typeof roomsId] || '',
+    );
+    console.log(currentSchedule);
+    setSchedule(currentSchedule);
+  };
 
-        setTeacher(currentTeacher.data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, []);
+  const fetchTeacher = async () => {
+    const { accessToken, refreshToken, userId } = tokens;
+
+    const currentTeacher = await getTeacher({
+      userId,
+      accessToken,
+    });
+    setTeacher(currentTeacher.data);
+  };
 
   useEffect(() => {
-    const fetchSchedule = async () => {
-      const currentSchedule = await getScheduleByRoom(
-        roomsId[room as keyof typeof roomsId] || '',
-      );
-      console.log(currentSchedule);
-      setSchedule(currentSchedule);
-    };
+    fetchTeacher();
     fetchSchedule();
   }, []);
+
+  useEffect(() => {
+    fetchSchedule();
+  }, [room]);
 
   return (
     <RouterPrivate>
@@ -84,7 +77,7 @@ export default function MainPage() {
         </h2>
       </div>
       <Room room={room} setRoom={setRoom} />
-      <Shifts setShift={setShift} />
+      <Shifts setShift={setShift} shift={shift} />
       {schedule ? (
         <Dates
           setActiveAside={setActiveAside}

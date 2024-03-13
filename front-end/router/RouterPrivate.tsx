@@ -3,6 +3,7 @@ import { newTokensProvider } from '@/providers/newTokens';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { MutatingDots } from 'react-loader-spinner';
 
 export function RouterPrivate({ children }: { children: React.ReactNode }) {
   const [authenticated, setAuthenticated] = useState<boolean | null>(null);
@@ -46,5 +47,22 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
     return <>{children}</>;
   }
 
-  return <p>Carregando...</p>;
+  return (
+    <div className="h-screen w-full flex flex-col items-center justify-center">
+      <MutatingDots
+        visible={true}
+        height="100"
+        width="100"
+        color="#19BAFF"
+        secondaryColor="#19BAFF"
+        radius="12.5"
+        ariaLabel="mutating-dots-loading"
+        wrapperStyle={{}}
+        wrapperClass=""
+      />
+      <p className="font-semibold">
+        Connectando a sua conta na agenda Silvio...
+      </p>
+    </div>
+  );
 }

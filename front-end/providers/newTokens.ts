@@ -1,19 +1,14 @@
 import { postRefreshToken } from '@/app/http/post.refreshToken';
+import { tokens } from './TokensSession';
 
 export const newTokensProvider = async () => {
   try {
-    const tokens = JSON.parse(localStorage.getItem('tokens') || '') as {
-      accessToken: string;
-      refreshToken: string;
-    };
+    const { accessToken, refreshToken, userId } = tokens;
+    const newTokens = await postRefreshToken({ refreshToken, userId });
 
-    const refreshToken = tokens?.refreshToken;
-
-    if (!refreshToken) return;
-
-    const newTokens = await postRefreshToken({ refreshToken });
-    localStorage.setItem('tokens', JSON.stringify(newTokens.data));
+    localStorage.setItem('tokens', JSON.stringify(newTokens));
   } catch (error) {
+    console.log(error);
     localStorage.removeItem('tokens');
   }
 };

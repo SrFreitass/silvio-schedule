@@ -46,6 +46,6 @@ model Schedule {
   room_id String 
   teacher users @relation(fields: [teacher_id], references: [id])
   schedule rooms @relation(fields: [room_id], references: [id])
-  
+  version Int  @default(autoincrement())
   @@map("schedule")
 }

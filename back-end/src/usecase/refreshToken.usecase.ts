@@ -3,13 +3,15 @@ import { NewTokenJWTProvider } from "../providers/newTokenJWT";
 
 export class RefreshTokenUseCase {
   async execute({
-    lastRefreshToken,
+    refreshToken,
     userId,
   }: {
-    lastRefreshToken: string;
+    refreshToken: string;
     userId: string;
   }) {
-    if (!lastRefreshToken) throw new Error("Refresh Token is missing");
+    if (!refreshToken) throw new Error("Refresh Token is missing");
+
+    console.info(refreshToken, userId);
 
     const user = await prisma.users.findUniqueOrThrow({
       where: {
@@ -20,7 +22,7 @@ export class RefreshTokenUseCase {
       },
     });
 
-    if (user.refreshToken && lastRefreshToken !== user.refreshToken.id) {
+    if (user.refreshToken && refreshToken !== user.refreshToken.id) {
       throw new Error("Refresh Token is invalid");
     }
 
@@ -33,7 +35,7 @@ export class RefreshTokenUseCase {
 
     await prisma.refreshToken.delete({
       where: {
-        id: lastRefreshToken,
+        id: refreshToken,
       },
     });
 

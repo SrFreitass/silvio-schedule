@@ -5,15 +5,18 @@ import { PiSunHorizon } from 'react-icons/pi';
 import { shift } from '../page';
 
 interface ShiftsProps {
+  shift: shift;
   setShift: Dispatch<shift>;
 }
 
-export function Shifts({ setShift }: ShiftsProps) {
+export function Shifts({ setShift, shift }: ShiftsProps) {
   return (
-    <div className="border-b mt-8">
-      <div className="flex gap-8 font-semibold">
+    <div className="mt-8">
+      <div className="flex gap-8 max-sm:justify-between max-[485px]:flex-col font-semibold">
         <span
-          className="flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none"
+          className={`flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none 
+          ${shift === 'morning' && 'bg-blue-100'}
+          `}
           onClick={() => setShift('morning')}
         >
           <FiSun />
@@ -21,7 +24,9 @@ export function Shifts({ setShift }: ShiftsProps) {
         </span>
 
         <span
-          className="flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none"
+          className={`flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none 
+          ${shift === 'aftermoon' && 'bg-blue-100'}
+          `}
           onClick={() => setShift('aftermoon')}
         >
           <PiSunHorizon />
@@ -29,7 +34,9 @@ export function Shifts({ setShift }: ShiftsProps) {
         </span>
 
         <span
-          className="flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none"
+          className={`flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none 
+          ${shift === 'night' && 'bg-blue-100'}
+          `}
           onClick={() => setShift('night')}
         >
           <IoIosMoon />

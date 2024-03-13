@@ -38,7 +38,7 @@ export function Room({ setRoom, room }: RoomProps) {
           <SelectItem value="7">Sala de tecnologia 3</SelectItem>
         </SelectContent>
       </Select>
-      <h3 className="text-lg font-semibold flex items-center gap-2">
+      <h3 className="text-lg font-semibold flex items-center gap-2 mt-4">
         <SiGoogleclassroom size={24} /> {room || ''} - Semana
       </h3>
     </div>

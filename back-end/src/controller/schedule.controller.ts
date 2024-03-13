@@ -8,7 +8,7 @@ class ScheduleController {
       const userId = req.headers.userId as string;
       const body = req.body as {
         roomId: string;
-        date: Date;
+        date: string;
       };
       const useCase = new ToScheduleUseCase();
       const output = await useCase.execute({ ...body, teacherId: userId });

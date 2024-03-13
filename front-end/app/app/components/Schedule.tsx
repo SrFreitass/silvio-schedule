@@ -14,30 +14,19 @@ interface DatesProps {
   schedule: IscheduleRoomData[];
 }
 
-const convertDay = (date: Date, options?: Intl.DateTimeFormatOptions) =>
-  date?.toLocaleDateString('pt-BR', options);
-
 const weekdayoff = {
   sábado: true,
   domingo: true,
 };
 
 const shiftsHours = {
-  morning: ['07h00', '7h50', '08h40', '09h25', '10h40', '11h20', '12h00'],
-  aftermoon: ['13h00', '13h50', '14h40', '15h25', '16h40', '17h20', '18h00'],
+  morning: ['07h00', '08h40', '09h25', '10h40', '11h20', '12h00'],
+  aftermoon: ['13h00', '14h40', '15h25', '16h40', '17h20', '18h00'],
   night: ['19h00', '20h50', '21h25', '22h00', '22h40', '23h00'],
 };
 
-const oneWeek = [1, 2, 3, 4, 5, 6, 7].map((day) => {
-  const date = new Date(new Date().getTime() + 86400000 * day);
-  const weekday = convertDay(date, {
-    dateStyle: 'full',
-  }).split(',')[0];
-
-  if (weekdayoff[weekday as keyof typeof weekdayoff]) {
-    return null;
-  }
-  return date;
+const oneWeek = [1, 2, 3, 4, 5].map((day) => {
+  return new Date(dayjs().day(day).hour(1).minute(0).toString());
 });
 
 const convertDayJS = ({ day, hour }: { day: Date; hour: string }) => {
@@ -77,19 +66,19 @@ export function Dates({
   // });
 
   return (
-    <ScrollContainer className="flex flex-col gap-12 -mt-1 h-[75vh] overflow-scroll">
-      <div className="flex justify-between gap-8 mt-4 max-h-[75vh] border">
+    <ScrollContainer className="flex flex-col gap-12 -mt-1 min-h-[80vh] overflow-scroll">
+      <div className="flex justify-between gap-8 mt-4 border-t">
         {oneWeek.map((day, index) => {
           return (
             <>
               {day && (
                 <div
                   key={index}
-                  className={`flex flex-col items-center p-4 border-l font-medium ${index === 4 && 'border-r'}`}
+                  className={`flex flex-col items-center p-4 border-l font-medium`}
                 >
                   <div className="border-b text-center w-row py-2">
                     <p>
-                      {convertDay(day, {
+                      {day.toLocaleDateString('pt-BR', {
                         weekday: 'short',
                       })}
                     </p>
@@ -98,23 +87,28 @@ export function Dates({
 
                   <div className="mt-6 flex flex-row-reverse gap-8 ">
                     <div className="flex flex-col gap-4">
-                      {shiftsHours[shift].map((hour) => {
+                      {shiftsHours[shift].map((hour, indexHour) => {
+                        let expiredDate = false;
                         let reserved = false;
                         return (
                           <div
                             className="flex flex-col items-center gap-4 pr-4 pb-2"
                             key={index}
-                            onClick={() => handleSchedule({ day, hour })}
                           >
                             <div className="flex items-center">
                               {index > 0 ? null : (
                                 <>
-                                  <h2 className="min-w-20 h-full text-lg font-semibold flex items-center">
-                                    {hour}
+                                  <h2 className="min-w-[4.5rem] h-full text-lg font-semibold flex items-center">
+                                    {hour} -
                                   </h2>
+                                  <span className="w-8 font-semibold">
+                                    {indexHour + 1}°
+                                  </span>
                                   <span className="h-column border"></span>
                                 </>
                               )}
+                              {new Date(day) < new Date() &&
+                                (expiredDate = true)}
                               {schedule.map((item, key) => {
                                 const condition =
                                   item.date === convertDayJS({ day, hour });
@@ -123,15 +117,28 @@ export function Dates({
                                   reserved = !reserved;
                                   return (
                                     <ScheduleDate
-                                      reserved={true}
+                                      reservedProps={{
+                                        date: item.date,
+                                        class: '2-D',
+                                        teacher: item.teacher.name,
+                                        lessonNumber: indexHour + 1,
+                                      }}
+                                      status="reserved"
                                       room="STE3"
                                       key={key}
                                     />
                                   );
                                 }
                               })}
-                              {!reserved && (
-                                <ScheduleDate reserved={false} room="STE3" />
+                              {!reserved && expiredDate && (
+                                <ScheduleDate status="expired" room="STE3" />
+                              )}
+                              {!reserved && !expiredDate && (
+                                <div
+                                  onClick={() => handleSchedule({ day, hour })}
+                                >
+                                  <ScheduleDate status="free" room="STE3" />
+                                </div>
                               )}
                             </div>
                             <span className="w-row h-[0.5px] border"></span>

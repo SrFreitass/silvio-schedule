@@ -29,7 +29,7 @@ export class LoginAccountUseCase {
 
     const refreshTokenUseCase = new RefreshTokenUseCase();
     const newTokens = await refreshTokenUseCase.execute({
-      lastRefreshToken: user.refreshToken.id,
+      refreshToken: user.refreshToken.id,
       userId: user.id,
     });
 

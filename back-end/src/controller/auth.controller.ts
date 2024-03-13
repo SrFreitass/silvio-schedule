@@ -13,7 +13,7 @@ class AuthController {
 
   async refreshToken(req: FastifyRequest, reply: FastifyReply) {
     try {
-      const body = req.body as { lastRefreshToken: string; userId: string };
+      const body = req.body as { refreshToken: string; userId: string };
       const useCase = new RefreshTokenUseCase();
       const output = await useCase.execute({ ...body });
       return {
