@@ -29,7 +29,7 @@ export class Router {
       { preHandler: verifyAuth },
       scheduleController.getScheduleByRoom,
     );
-    fastify.get(`${baseUrl}/schedule/excel`, scheduleController.excel);
+    // fastify.get(`${baseUrl}/schedule/excel`, scheduleController.excel);
 
     fastify.get(
       `${baseUrl}/teachers/:teacherId`,
