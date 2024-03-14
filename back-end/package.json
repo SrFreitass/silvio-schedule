@@ -6,6 +6,7 @@
     "dayjs": "^1.11.10",
     "fastify": "^4.26.2",
     "jsonwebtoken": "^9.0.2",
+    "node-xlsx": "^0.23.0",
     "typescript": "^5.4.2"
   },
   "name": "back-end",
@@ -23,6 +24,7 @@
     "@freitasdev/eslint-config": "^2.1.0",
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
+    "@types/node-xlsx": "^0.21.0",
     "prisma": "^5.10.2"
   }
 }

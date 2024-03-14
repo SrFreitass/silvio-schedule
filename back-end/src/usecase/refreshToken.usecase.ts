@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { prisma } from "../../prisma";
 import { NewTokenJWTProvider } from "../providers/newTokenJWT";
 
@@ -11,35 +12,43 @@ export class RefreshTokenUseCase {
   }) {
     if (!refreshToken) throw new Error("Refresh Token is missing");
 
-    console.info(refreshToken, userId);
+    console.info(refreshToken, "Refresh Token Front-end");
 
     const user = await prisma.users.findUniqueOrThrow({
       where: {
         id: userId,
       },
       include: {
-        refreshToken: {},
+        refreshToken: {
+          select: {
+            id: true,
+            expiresIn: true,
+            user_id: true,
+          },
+        },
       },
     });
 
-    if (user.refreshToken && refreshToken !== user.refreshToken.id) {
+    console.info(user.refreshToken?.id, "User Refresh Token");
+
+    if (refreshToken !== user.refreshToken?.id) {
       throw new Error("Refresh Token is invalid");
     }
 
-    if (
-      user?.refreshToken &&
-      new Date(user.refreshToken.expiresIn) < new Date()
-    ) {
+    if (new Date(user.refreshToken.expiresIn) < new Date()) {
       throw new Error("Refresh Token expired");
     }
 
     await prisma.refreshToken.delete({
       where: {
-        id: refreshToken,
+        user_id: user.id,
       },
     });
 
-    const expiresIn = new Date(new Date().getTime() + 2629746000).toISOString();
+    const newTokenJWT = new NewTokenJWTProvider().execute(userId);
+
+    const expiresIn = dayjs().add(30, "days").toISOString();
+
     const newRefreshToken = await prisma.refreshToken.create({
       data: {
         expiresIn,
@@ -47,11 +56,9 @@ export class RefreshTokenUseCase {
       },
     });
 
-    const newTokenJWT = new NewTokenJWTProvider().execute(userId);
-
     return {
-      accessToken: newTokenJWT,
       refreshToken: newRefreshToken.id,
+      accessToken: newTokenJWT,
       expiresIn: newRefreshToken.expiresIn,
     };
   }

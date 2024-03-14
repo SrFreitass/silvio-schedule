@@ -43,6 +43,26 @@ class ScheduleController {
       };
     }
   }
+
+  // async excel() {
+  //   const data = [
+  //     ["Sala de Tecnlogia 3"],
+  //     ["Horário", "Turma", "Professor"],
+  //     ["7:00", "2-A", "Gilmar"],
+  //     ["7:00", "2-A", "Gilmar"],
+  //     ["7:00", "2-A", "Gilmar"],
+  //     ["7:00", "2-A", "Gilmar"],
+  //   ];
+  //   const sheetOptions = {
+  //     "!cols": [{ wch: 6 }, { wch: 7 }, { wch: 10 }, { wch: 20 }],
+  //   };
+
+  //   const buffer = xlsx.build([{ name: "mySheetName", data, options: {} }], {
+  //     sheetOptions,
+  //   });
+
+  //   writeFileSync(__dirname + "test.xlsx", buffer);
+  // }
 }
 
 export default new ScheduleController();

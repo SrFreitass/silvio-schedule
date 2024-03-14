@@ -11,7 +11,7 @@ export class NewTokenJWTProvider {
       },
       TOKEN_SECRET,
       {
-        expiresIn: "30s",
+        expiresIn: "1h",
       },
     );
 

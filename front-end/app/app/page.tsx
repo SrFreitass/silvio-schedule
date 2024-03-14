@@ -34,16 +34,17 @@ export default function MainPage() {
   });
 
   const fetchSchedule = async () => {
-    const currentSchedule = await getScheduleByRoom(
-      roomsId[room as keyof typeof roomsId] || '',
-    );
-    console.log(currentSchedule);
+    const currentRoom = roomsId[room as keyof typeof roomsId];
+
+    if (!currentRoom) return;
+
+    const currentSchedule = await getScheduleByRoom(currentRoom);
+
     setSchedule(currentSchedule);
   };
 
   const fetchTeacher = async () => {
     const { accessToken, refreshToken, userId } = tokens;
-
     const currentTeacher = await getTeacher({
       userId,
       accessToken,

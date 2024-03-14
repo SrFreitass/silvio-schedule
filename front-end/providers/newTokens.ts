@@ -9,6 +9,5 @@ export const newTokensProvider = async () => {
     localStorage.setItem('tokens', JSON.stringify(newTokens));
   } catch (error) {
     console.log(error);
-    localStorage.removeItem('tokens');
   }
 };

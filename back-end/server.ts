@@ -4,7 +4,7 @@ import { Router } from "./src/router/router";
 
 const app = fastify();
 
-new Router(app, "/api/v1");
+const router = new Router(app, "/api/v1");
 
 app.register(cors, {
   origin: "*",

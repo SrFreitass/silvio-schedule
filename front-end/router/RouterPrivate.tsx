@@ -1,4 +1,5 @@
 import { getVerifyAuth } from '@/app/http/get.verifyAuth';
+import { tokens } from '@/providers/TokensSession';
 import { newTokensProvider } from '@/providers/newTokens';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
@@ -12,10 +13,7 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const verify = async () => {
       try {
-        const tokens = JSON.parse(localStorage.getItem('tokens') || '{}') as {
-          accessToken: string;
-          refreshToken: string;
-        };
+        const { accessToken, refreshToken, userId } = tokens;
 
         const auth = await getVerifyAuth(tokens.accessToken);
         if (auth.message === 'Authenticated') {
@@ -25,9 +23,11 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
         console.error(error);
         if (!(error instanceof AxiosError)) return;
 
-        if (error.response?.data?.message === 'jwt expired') {
+        const messageError = error.response?.data?.message;
+
+        if (messageError === 'jwt expired') {
           await newTokensProvider();
-          verify();
+          location.reload();
         }
 
         if (error.response?.data?.message === 'Unauthenticated') {

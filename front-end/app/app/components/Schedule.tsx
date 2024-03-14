@@ -66,15 +66,15 @@ export function Dates({
   // });
 
   return (
-    <ScrollContainer className="flex flex-col gap-12 -mt-1 min-h-[80vh] overflow-scroll">
-      <div className="flex justify-between gap-8 mt-4 border-t">
+    <ScrollContainer className="flex flex-col gap-12 min-h-[80vh] border-t overflow-scroll">
+      <div className="flex justify-between gap-8">
         {oneWeek.map((day, index) => {
           return (
             <>
               {day && (
                 <div
                   key={index}
-                  className={`flex flex-col items-center p-4 border-l font-medium`}
+                  className={`flex flex-col items-center p-4 border-l font-medium ${index === 4 && 'border-r'}`}
                 >
                   <div className="border-b text-center w-row py-2">
                     <p>
@@ -95,13 +95,13 @@ export function Dates({
                             className="flex flex-col items-center gap-4 pr-4 pb-2"
                             key={index}
                           >
-                            <div className="flex items-center">
+                            <div className="flex items-center text-nowrap">
                               {index > 0 ? null : (
                                 <>
                                   <h2 className="min-w-[4.5rem] h-full text-lg font-semibold flex items-center">
-                                    {hour} -
+                                    {hour} -{' '}
                                   </h2>
-                                  <span className="w-8 font-semibold">
+                                  <span className="min-w-8 font-semibold">
                                     {indexHour + 1}°
                                   </span>
                                   <span className="h-column border"></span>
