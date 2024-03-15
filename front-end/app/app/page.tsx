@@ -6,6 +6,7 @@ import { RouterPrivate } from '@/router/RouterPrivate';
 
 import { tokens } from '@/providers/TokensSession';
 import { useEffect, useState } from 'react';
+import { Header } from '../components/Header';
 import { getScheduleByRoom } from '../http/get.scheduleByRoom';
 import { getTeacher } from '../http/get.teacher';
 import { Room } from './components/Room';
@@ -21,6 +22,9 @@ const weekdayoff = {
 export type shift = 'morning' | 'aftermoon' | 'night';
 
 export default function MainPage() {
+  const [theme, setTheme] = useState(
+    localStorage.getItem('theme') === 'dark' ? 'dark' : 'light',
+  );
   const [activeAside, setActiveAside] = useState(false);
   const [shift, setShift] = useState<shift>('morning');
   const [date, setDate] = useState<{ day: Date; hour: string } | null>(null);
@@ -32,6 +36,7 @@ export default function MainPage() {
   const newDate = new Date().toLocaleDateString('pt-BR', {
     dateStyle: 'full',
   });
+  const userRole = teacher?.role;
 
   const fetchSchedule = async () => {
     const currentRoom = roomsId[room as keyof typeof roomsId];
@@ -40,15 +45,15 @@ export default function MainPage() {
 
     const currentSchedule = await getScheduleByRoom(currentRoom);
 
+    if (!currentSchedule) return;
+
     setSchedule(currentSchedule);
   };
 
   const fetchTeacher = async () => {
-    const { accessToken, refreshToken, userId } = tokens;
-    const currentTeacher = await getTeacher({
-      userId,
-      accessToken,
-    });
+    const { userId } = tokens;
+
+    const currentTeacher = await getTeacher(userId);
     setTeacher(currentTeacher.data);
   };
 
@@ -63,9 +68,10 @@ export default function MainPage() {
 
   return (
     <RouterPrivate>
+      <Header userAdmin={userRole === 'admin'} />
       <div className="mt-12">
         <h1 className="text-2xl font-semibold">
-          Bem-vindo(a) de volta, {teacher?.name} 👋
+          Bem-vindo(a) de volta, {teacher?.name} 👋{' '}
         </h1>
         <h2 className="flex items-center gap-2">
           {weekdayoff[newDate.split(',')[0] as keyof typeof weekdayoff] ? (

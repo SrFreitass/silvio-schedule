@@ -11,6 +11,13 @@ class AuthController {
     };
   }
 
+  async verifyAdmin(req: FastifyRequest, reply: FastifyReply) {
+    return {
+      statusCode: 200,
+      message: "User is admin",
+    };
+  }
+
   async refreshToken(req: FastifyRequest, reply: FastifyReply) {
     try {
       const body = req.body as { refreshToken: string; userId: string };

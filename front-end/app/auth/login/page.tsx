@@ -3,12 +3,16 @@
 import { postLogin } from '@/app/http/post.login';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BiSolidError } from 'react-icons/bi';
-import { FaCalendarCheck } from 'react-icons/fa';
+import { FaCalendarCheck, FaCircleNotch } from 'react-icons/fa';
+import { IoMdCloseCircle } from 'react-icons/io';
+import { IoCheckmarkCircle } from 'react-icons/io5';
+import { VscEye, VscEyeClosed } from 'react-icons/vsc';
 
 type Inputs = {
   email: string;
@@ -17,6 +21,7 @@ type Inputs = {
 
 export default function LoginPage() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const [emailOrPasswordError, setEmailOrPasswordError] = useState(false);
   const {
     register,
@@ -25,6 +30,12 @@ export default function LoginPage() {
   } = useForm<Inputs>();
   const login: SubmitHandler<Inputs> = async ({ email, password }) => {
     try {
+      toast({
+        action: <FaCircleNotch className="animate-pulse" />,
+        title: 'Efetuando login!',
+        description: 'Um instante.',
+      });
+
       const { data } = await postLogin({ email, password });
       localStorage.setItem(
         'tokens',
@@ -34,6 +45,12 @@ export default function LoginPage() {
         }),
       );
 
+      toast({
+        action: <IoCheckmarkCircle className="text-green-500" />,
+        title: 'Login efetuado com sucesso!',
+        description: 'Você será redirecionado a agenda em segundos...',
+      });
+
       router.push('/app');
     } catch (error) {
       if (!(error instanceof AxiosError)) return;
@@ -41,6 +58,12 @@ export default function LoginPage() {
       if (error.response?.data?.message === 'E-mail or password invalid') {
         setEmailOrPasswordError(true);
       }
+
+      toast({
+        action: <IoMdCloseCircle className="text-red-500" />,
+        title: 'Houve algum problema...!',
+        description: 'Um erro inesperado ocorreu.',
+      });
     }
   };
 
@@ -77,11 +100,27 @@ export default function LoginPage() {
         </div>
         <div>
           <label>Senha</label>
-          <Input
-            placeholder="Sua senha"
-            type="password"
-            {...register('password', { required: true })}
-          />
+          <div className="flex items-center justify-end">
+            <Input
+              className="pr-10"
+              placeholder="Sua senha"
+              type={showPassword ? 'text' : 'password'}
+              {...register('password', { required: true })}
+            />
+            {showPassword ? (
+              <VscEye
+                size={28}
+                className="absolute mr-2"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <VscEyeClosed
+                size={28}
+                className="absolute mr-2"
+                onClick={() => setShowPassword(true)}
+              />
+            )}
+          </div>
           {errors.email?.type === 'required' && (
             <p className="text-red-500 font-medium flex items-center gap-2 mt-2">
               <BiSolidError />

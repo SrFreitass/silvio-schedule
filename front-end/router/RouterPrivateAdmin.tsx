@@ -1,22 +1,24 @@
-import { getVerifyAuth } from '@/app/http/get.verifyAuth';
+import { getVerifyAuthAdmin } from '@/app/http/get.verifyAuthAdmin';
 import { newTokensProvider } from '@/providers/newTokens';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { MutatingDots } from 'react-loader-spinner';
 
-export function RouterPrivate({ children }: { children: React.ReactNode }) {
-  const [authenticated, setAuthenticated] = useState<
-    'UNAUTHENTICATED' | 'AUTHENTICATED' | 'APPROVAL_REQUEST' | 'LOADING'
-  >('LOADING');
+export function RouterPrivateAdmin({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const verify = async () => {
       try {
-        const auth = await getVerifyAuth();
-        if (auth.message === 'Authenticated') {
-          setAuthenticated('AUTHENTICATED');
+        const auth = await getVerifyAuthAdmin();
+        if (auth.message === 'User is admin') {
+          setIsAdmin(true);
         }
       } catch (error) {
         console.error(error);
@@ -29,16 +31,12 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
             await newTokensProvider();
             location.reload();
           } catch (err) {
-            setAuthenticated('UNAUTHENTICATED');
+            router.push('/app');
           }
         }
 
-        if (error.response?.data?.message === 'Unauthorized') {
-          setAuthenticated('APPROVAL_REQUEST');
-        }
-
-        if (error.response?.data?.message === 'Unauthenticated') {
-          setAuthenticated('UNAUTHENTICATED');
+        if (error.response?.data?.message === "User not's admin") {
+          setIsAdmin(false);
         }
       }
     };
@@ -46,15 +44,11 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
     verify();
   }, []);
 
-  if (authenticated === 'UNAUTHENTICATED') {
-    router.push('/auth/login');
+  if (!isAdmin && isAdmin != null) {
+    router.push('/app');
   }
 
-  if (authenticated === 'APPROVAL_REQUEST') {
-    <p>Aguarde um momento, estamos validando sua conta</p>;
-  }
-
-  if (authenticated === 'AUTHENTICATED') {
+  if (isAdmin) {
     return <>{children}</>;
   }
 
@@ -72,7 +66,7 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
         wrapperClass=""
       />
       <p className="font-semibold text-center">
-        Connectando a sua conta na agenda Silvio...
+        Connectando a sua conta na administração da agenda Silvio...
       </p>
     </div>
   );

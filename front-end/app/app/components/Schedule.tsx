@@ -26,7 +26,7 @@ const shiftsHours = {
 };
 
 const oneWeek = [1, 2, 3, 4, 5].map((day) => {
-  return new Date(dayjs().day(day).hour(1).minute(0).toString());
+  return dayjs().day(day).hour(1).minute(0).toDate();
 });
 
 const convertDayJS = ({ day, hour }: { day: Date; hour: string }) => {
@@ -66,7 +66,7 @@ export function Dates({
   // });
 
   return (
-    <ScrollContainer className="flex flex-col gap-12 min-h-[80vh] border-t overflow-scroll">
+    <ScrollContainer className="flex flex-col gap-12 max-h-[75vh] border-t overflow-scroll">
       <div className="flex justify-between gap-8">
         {oneWeek.map((day, index) => {
           return (
@@ -107,8 +107,12 @@ export function Dates({
                                   <span className="h-column border"></span>
                                 </>
                               )}
-                              {new Date(day) < new Date() &&
-                                (expiredDate = true)}
+
+                              {new Date(
+                                dayjs(convertDayJS({ day, hour }))
+                                  .add(3, 'hours')
+                                  .toDate(),
+                              ) < new Date() && (expiredDate = true)}
                               {schedule.map((item, key) => {
                                 const condition =
                                   item.date === convertDayJS({ day, hour });

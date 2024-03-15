@@ -1,22 +1,12 @@
 import { http } from '@/models/http.interface';
 import { IscheduleRoomData } from '@/models/scheduleRoom.interface';
 import { ITeacherData } from '@/models/teacher.interface';
-import axios from 'axios';
+import { axiosInstace } from './axios';
 
-export const getTeacher = async ({
-  accessToken,
-  userId,
-}: {
-  userId: string;
-  accessToken: string;
-}) => {
-  const teacher = await axios.get<
+export const getTeacher = async (userId: string) => {
+  const teacher = await axiosInstace.get<
     http<ITeacherData & { Schedule: IscheduleRoomData }>
-  >(`http://localhost:8081/api/v1/teachers/${userId}`, {
-    headers: {
-      'access-token': accessToken,
-    },
-  });
+  >(`/teachers/${userId}`);
 
   return teacher.data;
 };

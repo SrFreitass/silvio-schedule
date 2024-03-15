@@ -1,5 +1,5 @@
 import { ITokens } from '@/models/tokens.interface';
-import axios from 'axios';
+import { axiosInstace } from './axios';
 
 export const postLogin = async ({
   email,
@@ -8,13 +8,10 @@ export const postLogin = async ({
   email: string;
   password: string;
 }) => {
-  const tokens = await axios.post<ITokens>(
-    'http://localhost:8081/api/v1/auth/login',
-    {
-      email,
-      password,
-    },
-  );
+  const tokens = await axiosInstace.post<ITokens>('auth/login', {
+    email,
+    password,
+  });
 
   return tokens.data;
 };

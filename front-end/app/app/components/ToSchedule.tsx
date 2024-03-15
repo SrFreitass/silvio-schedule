@@ -47,7 +47,12 @@ export function ToSchedule({ setActiveAside, date, room }: ToScheduleProps) {
     <div className="fixed h-screen w-screen bg-back top-0 right-0 left-0">
       <div className="w-full h-full flex justify-end">
         <aside
-          className={`min-w-[30rem] w-1/3 h-full max-sm:min-w-full bg-white p-10 shadow-md flex flex-col gap-4 animate-aside`}
+          className={`
+          min-w-[30rem] w-1/3 h-full max-sm:min-w-full p-10
+          flex flex-col gap-4
+          bg-white dark:bg-[#050f2e] shadow-md
+          animate-aside
+          `}
         >
           <IoClose
             size={24}

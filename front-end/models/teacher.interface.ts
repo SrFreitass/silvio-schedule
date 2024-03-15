@@ -6,7 +6,7 @@ export interface ITeacherData {
   name: string;
   email: string;
   date: Date;
-  teacher_id: string;
+  createdAt: string;
 }
 
 export type ITeacher = http<ITeacherData>;

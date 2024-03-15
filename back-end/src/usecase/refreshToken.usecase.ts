@@ -30,7 +30,7 @@ export class RefreshTokenUseCase {
     });
 
     console.info(user.refreshToken?.id, "User Refresh Token");
-
+    console.log(refreshToken, user.refreshToken?.id);
     if (refreshToken !== user.refreshToken?.id) {
       throw new Error("Refresh Token is invalid");
     }

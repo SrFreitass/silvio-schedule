@@ -1,5 +1,5 @@
 import { ITokens } from '@/models/tokens.interface';
-import axios from 'axios';
+import { axiosInstace } from './axios';
 
 export const postRefreshToken = async ({
   refreshToken,
@@ -8,13 +8,10 @@ export const postRefreshToken = async ({
   refreshToken: string;
   userId: string;
 }) => {
-  const newTokens = await axios.post<ITokens>(
-    'http://localhost:8081/api/v1/auth/refresh/token',
-    {
-      refreshToken,
-      userId,
-    },
-  );
+  const newTokens = await axiosInstace.post<ITokens>('/auth/refresh/token', {
+    refreshToken,
+    userId,
+  });
 
   return newTokens.data.data;
 };

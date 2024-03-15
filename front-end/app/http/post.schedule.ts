@@ -1,7 +1,7 @@
 import { IitemSchedule } from '@/models/itemSchedule.interface';
-import { tokens } from '@/providers/TokensSession';
 import { newTokensProvider } from '@/providers/newTokens';
-import axios, { AxiosError } from 'axios';
+import { AxiosError } from 'axios';
+import { axiosInstace } from './axios';
 
 export const postSchedule = async ({
   date,
@@ -11,18 +11,10 @@ export const postSchedule = async ({
   roomId: string;
 }) => {
   try {
-    const item = await axios.post<IitemSchedule>(
-      'http://localhost:8081/api/v1/schedule',
-      {
-        date,
-        roomId,
-      },
-      {
-        headers: {
-          'access-token': tokens.accessToken,
-        },
-      },
-    );
+    const item = await axiosInstace.post<IitemSchedule>('/schedule', {
+      date,
+      roomId,
+    });
 
     return item.data.data;
   } catch (error) {
@@ -32,7 +24,6 @@ export const postSchedule = async ({
     const messageError = error.response?.data?.message;
 
     if (messageError === 'jwt expired') {
-      console.log('A CLEIDE É UMA ESTUPRADA!');
       await newTokensProvider();
       await postSchedule({ date, roomId });
     }

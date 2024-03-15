@@ -15,7 +15,7 @@ export function Shifts({ setShift, shift }: ShiftsProps) {
       <div className="flex gap-8 max-sm:justify-between max-[485px]:flex-col font-semibold">
         <span
           className={`flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none 
-          ${shift === 'morning' && 'bg-blue-100'}
+          ${shift === 'morning' && 'bg-blue-100 dark:text-black'}
           `}
           onClick={() => setShift('morning')}
         >
@@ -25,7 +25,7 @@ export function Shifts({ setShift, shift }: ShiftsProps) {
 
         <span
           className={`flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none 
-          ${shift === 'aftermoon' && 'bg-blue-100'}
+          ${shift === 'aftermoon' && 'bg-blue-100 dark:text-black'}
           `}
           onClick={() => setShift('aftermoon')}
         >
@@ -35,7 +35,7 @@ export function Shifts({ setShift, shift }: ShiftsProps) {
 
         <span
           className={`flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none 
-          ${shift === 'night' && 'bg-blue-100'}
+          ${shift === 'night' && 'bg-blue-100 dark:text-black'}
           `}
           onClick={() => setShift('night')}
         >

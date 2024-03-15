@@ -1,13 +1,13 @@
 import { IscheduleRoom } from '@/models/scheduleRoom.interface';
 import { tokens } from '@/providers/TokensSession';
 import { newTokensProvider } from '@/providers/newTokens';
-import axios, { AxiosError } from 'axios';
-import { baseURL } from './baseURL';
+import { AxiosError } from 'axios';
+import { axiosInstace } from './axios';
 
 export const getScheduleByRoom = async (roomId: string) => {
   try {
-    const schedule = await axios.get<IscheduleRoom>(
-      `${baseURL}/schedule/${roomId}`,
+    const schedule = await axiosInstace.get<IscheduleRoom>(
+      `/schedule/${roomId}`,
       {
         headers: {
           'access-token': tokens.accessToken,
@@ -23,7 +23,6 @@ export const getScheduleByRoom = async (roomId: string) => {
     const messageError = error.response?.data?.message;
 
     if (messageError === 'jwt expired') {
-      console.log('A CLEIDE É UMA ESTUPRADA!');
       await newTokensProvider();
       await getScheduleByRoom(roomId);
     }

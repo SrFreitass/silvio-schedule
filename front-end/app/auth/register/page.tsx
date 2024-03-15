@@ -3,12 +3,16 @@
 import { postRegister } from '@/app/http/post.register';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { BiSolidError } from 'react-icons/bi';
-import { FaCalendarCheck } from 'react-icons/fa';
+import { FaCalendarCheck, FaCircleNotch } from 'react-icons/fa';
+import { IoMdCloseCircle } from 'react-icons/io';
+import { IoCheckmarkCircle } from 'react-icons/io5';
+import { VscEye, VscEyeClosed } from 'react-icons/vsc';
 
 type Inputs = {
   name: string;
@@ -19,6 +23,7 @@ type Inputs = {
 
 export default function SignUpPage() {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
   const [emailAlready, setEmailAlready] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
   const {
@@ -37,6 +42,11 @@ export default function SignUpPage() {
 
       if (confirmPassword !== password) return setConfirmPasswordError(true);
       const { data } = await postRegister({ email, name, password });
+      toast({
+        action: <FaCircleNotch className="animate-pulse" />,
+        title: 'Registrando sua conta!',
+        description: 'Um instante.',
+      });
 
       localStorage.setItem(
         'tokens',
@@ -46,6 +56,12 @@ export default function SignUpPage() {
         }),
       );
 
+      toast({
+        action: <IoCheckmarkCircle className="text-green-500" />,
+        title: 'Conta registrada com sucesso!',
+        description: 'Você será redirecionado a agenda em segundos...',
+      });
+
       router.push('/app');
     } catch (error) {
       if (!(error instanceof AxiosError)) return;
@@ -53,6 +69,12 @@ export default function SignUpPage() {
       if (error.response?.data?.message === 'E-mail already exists') {
         setEmailAlready(true);
       }
+
+      toast({
+        action: <IoMdCloseCircle className="text-red-500" />,
+        title: 'Houve algum problema...!',
+        description: 'Um erro inesperado ocorreu.',
+      });
     }
   };
 
@@ -117,14 +139,29 @@ export default function SignUpPage() {
         </div>
         <div>
           <label>Senha</label>
-          <Input
-            placeholder="Sua senha"
-            type="password"
-            {...register('password', {
-              required: true,
-              pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/g,
-            })}
-          />
+          <div className="flex items-center justify-end">
+            <Input
+              placeholder="Sua senha"
+              type={showPassword ? 'text' : 'password'}
+              {...register('password', {
+                required: true,
+                pattern: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/g,
+              })}
+            />
+            {showPassword ? (
+              <VscEye
+                size={28}
+                className="absolute mr-2"
+                onClick={() => setShowPassword(false)}
+              />
+            ) : (
+              <VscEyeClosed
+                size={28}
+                className="absolute mr-2"
+                onClick={() => setShowPassword(true)}
+              />
+            )}
+          </div>
           {errors.password?.type === 'required' && (
             <p className="text-red-500 font-medium flex items-center gap-2 mt-2">
               <BiSolidError />

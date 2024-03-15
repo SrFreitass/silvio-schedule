@@ -2,7 +2,7 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import { decode, verify } from "jsonwebtoken";
 import { prisma } from "../../prisma";
 
-export async function verifyAuth(
+export async function verifyAuthAdmin(
   req: FastifyRequest,
   reply: FastifyReply,
   next: any,
@@ -17,8 +17,6 @@ export async function verifyAuth(
   verify(token, TOKEN_SECRET);
   const { userId } = decode(token) as { userId: string };
 
-  console.log(userId, "USER_ID");
-
   const user = await prisma.users.findUnique({
     where: {
       id: userId || "",
@@ -27,7 +25,7 @@ export async function verifyAuth(
 
   if (!user?.id) throw new Error("Unauthenticated");
 
-  if (user.role === "stranger") throw new Error("Unauthorized");
+  if (user?.role !== "admin") throw new Error("User not's admin");
 
   req.headers.userId = user.id;
 
