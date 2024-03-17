@@ -12,12 +12,15 @@ export class UpdateRoleUserUseCase {
         role: "teacher",
       },
       select: {
+        id: true,
         name: true,
         email: true,
         role: true,
         createdAt: true,
       },
     });
+
+    console.log(user);
 
     return user;
   }

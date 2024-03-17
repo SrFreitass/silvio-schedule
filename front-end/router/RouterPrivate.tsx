@@ -1,11 +1,16 @@
-import { getVerifyAuth } from '@/app/http/get.verifyAuth';
+import { getVerifyAuth } from '@/http/get.verifyAuth';
 import { newTokensProvider } from '@/providers/newTokens';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { MutatingDots } from 'react-loader-spinner';
+import { Dispatch, useEffect, useState } from 'react';
+import { LuCalendarCheck2 } from 'react-icons/lu';
 
-export function RouterPrivate({ children }: { children: React.ReactNode }) {
+export function RouterPrivate({
+  children,
+  setRenderized,
+}: {
+  children: React.ReactNode;
+} & { setRenderized: Dispatch<boolean> }) {
   const [authenticated, setAuthenticated] = useState<
     'UNAUTHENTICATED' | 'AUTHENTICATED' | 'APPROVAL_REQUEST' | 'LOADING'
   >('LOADING');
@@ -17,11 +22,11 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
         const auth = await getVerifyAuth();
         if (auth.message === 'Authenticated') {
           setAuthenticated('AUTHENTICATED');
+          setRenderized(true);
         }
       } catch (error) {
         console.error(error);
         if (!(error instanceof AxiosError)) return;
-
         const messageError = error.response?.data?.message;
 
         if (messageError === 'jwt expired') {
@@ -33,11 +38,11 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
           }
         }
 
-        if (error.response?.data?.message === 'Unauthorized') {
+        if (messageError === 'Unauthorized') {
           setAuthenticated('APPROVAL_REQUEST');
         }
 
-        if (error.response?.data?.message === 'Unauthenticated') {
+        if (messageError === 'Unauthenticated') {
           setAuthenticated('UNAUTHENTICATED');
         }
       }
@@ -51,7 +56,14 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
   }
 
   if (authenticated === 'APPROVAL_REQUEST') {
-    <p>Aguarde um momento, estamos validando sua conta</p>;
+    return (
+      <div className="h-screen flex flex-col justify-center items-center">
+        <LuCalendarCheck2 size={48} className="animate-pulse" />
+        <p className="text-lg font-semibold text-center">
+          Aguarde um momento, estamos validando sua conta! Isso pode demorar.
+        </p>
+      </div>
+    );
   }
 
   if (authenticated === 'AUTHENTICATED') {
@@ -60,19 +72,9 @@ export function RouterPrivate({ children }: { children: React.ReactNode }) {
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center">
-      <MutatingDots
-        visible={true}
-        height="100"
-        width="100"
-        color="#19BAFF"
-        secondaryColor="#19BAFF"
-        radius="12.5"
-        ariaLabel="mutating-dots-loading"
-        wrapperStyle={{}}
-        wrapperClass=""
-      />
+      <LuCalendarCheck2 size={48} className="animate-pulse" />
       <p className="font-semibold text-center">
-        Connectando a sua conta na agenda Silvio...
+        Conectando a sua conta na agenda Silvio...
       </p>
     </div>
   );

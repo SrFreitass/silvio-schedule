@@ -1,9 +1,9 @@
 'use client';
 
-import { postRegister } from '@/app/http/post.register';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+import { postRegister } from '@/http/post.register';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -62,7 +62,7 @@ export default function SignUpPage() {
         description: 'Você será redirecionado a agenda em segundos...',
       });
 
-      router.push('/app');
+      router.push('/');
     } catch (error) {
       if (!(error instanceof AxiosError)) return;
 

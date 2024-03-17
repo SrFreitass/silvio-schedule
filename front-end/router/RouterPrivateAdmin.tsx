@@ -1,15 +1,16 @@
-import { getVerifyAuthAdmin } from '@/app/http/get.verifyAuthAdmin';
+import { getVerifyAuthAdmin } from '@/http/get.verifyAuthAdmin';
 import { newTokensProvider } from '@/providers/newTokens';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { MutatingDots } from 'react-loader-spinner';
+import { Dispatch, useEffect, useState } from 'react';
+import { LuCalendarCheck2 } from 'react-icons/lu';
 
 export function RouterPrivateAdmin({
   children,
+  setRenderized,
 }: {
   children: React.ReactNode;
-}) {
+} & { setRenderized: Dispatch<boolean> }) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const router = useRouter();
 
@@ -19,6 +20,7 @@ export function RouterPrivateAdmin({
         const auth = await getVerifyAuthAdmin();
         if (auth.message === 'User is admin') {
           setIsAdmin(true);
+          setRenderized(true);
         }
       } catch (error) {
         console.error(error);
@@ -31,7 +33,7 @@ export function RouterPrivateAdmin({
             await newTokensProvider();
             location.reload();
           } catch (err) {
-            router.push('/app');
+            router.push('/');
           }
         }
 
@@ -45,7 +47,7 @@ export function RouterPrivateAdmin({
   }, []);
 
   if (!isAdmin && isAdmin != null) {
-    router.push('/app');
+    router.push('/');
   }
 
   if (isAdmin) {
@@ -54,17 +56,7 @@ export function RouterPrivateAdmin({
 
   return (
     <div className="h-screen w-full flex flex-col items-center justify-center">
-      <MutatingDots
-        visible={true}
-        height="100"
-        width="100"
-        color="#19BAFF"
-        secondaryColor="#19BAFF"
-        radius="12.5"
-        ariaLabel="mutating-dots-loading"
-        wrapperStyle={{}}
-        wrapperClass=""
-      />
+      <LuCalendarCheck2 size={48} className="animate-pulse" />
       <p className="font-semibold text-center">
         Connectando a sua conta na administração da agenda Silvio...
       </p>

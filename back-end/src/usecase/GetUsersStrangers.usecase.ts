@@ -7,6 +7,7 @@ export class GetUsersStrangersUseCase {
         role: "stranger",
       },
       select: {
+        id: true,
         name: true,
         email: true,
         role: true,

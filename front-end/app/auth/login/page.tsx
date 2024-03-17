@@ -1,9 +1,9 @@
 'use client';
 
-import { postLogin } from '@/app/http/post.login';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from '@/components/ui/use-toast';
+import { postLogin } from '@/http/post.login';
 import { AxiosError } from 'axios';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -51,7 +51,8 @@ export default function LoginPage() {
         description: 'Você será redirecionado a agenda em segundos...',
       });
 
-      router.push('/app');
+      router.push('/');
+      location.reload();
     } catch (error) {
       if (!(error instanceof AxiosError)) return;
 

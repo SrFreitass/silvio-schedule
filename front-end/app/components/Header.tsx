@@ -28,12 +28,12 @@ export function Header({ userAdmin }: HeaderProps) {
 
   return (
     <header className="py-4 flex items-center justify-between">
-      <h2 className="text-xl font-semibold flex items-center gap-2">
+      <h2 className="text-xl font-semibold flex items-center gap-2 max-sm:text-lg">
         <LuCalendarCheck2 size={24} />
-        <Link href={'/app'}>Agenda Silvio</Link>
+        <Link href={'/'}>Agenda Silvio</Link>
       </h2>
       <nav>
-        <ul className="flex gap-4">
+        <ul className="flex gap-4 max-[560px]:invisible">
           <li className="hover:text-zinc-500 font-medium">
             <Link href={'/admin/users'}>{userAdmin && 'Administração'}</Link>
           </li>

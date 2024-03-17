@@ -1,6 +1,6 @@
-import { postSchedule } from '@/app/http/post.schedule';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { postSchedule } from '@/http/post.schedule';
 import dayjs from 'dayjs';
 import { Dispatch, MouseEvent } from 'react';
 import { IoClose } from 'react-icons/io5';
