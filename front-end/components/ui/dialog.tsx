@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+
 'use client';
 
 import * as DialogPrimitive from '@radix-ui/react-dialog';
