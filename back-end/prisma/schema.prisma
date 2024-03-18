@@ -42,6 +42,7 @@ model rooms {
 model Schedule {
   id  String @id @default(uuid())
   date DateTime 
+  class String
   teacher_id String
   room_id String 
   teacher users @relation(fields: [teacher_id], references: [id])

@@ -58,7 +58,7 @@ export function RouterPrivateAdmin({
     <div className="h-screen w-full flex flex-col items-center justify-center">
       <LuCalendarCheck2 size={48} className="animate-pulse" />
       <p className="font-semibold text-center">
-        Connectando a sua conta na administração da agenda Silvio...
+        Conectando a sua conta na administração da agenda...
       </p>
     </div>
   );

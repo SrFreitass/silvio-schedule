@@ -4,6 +4,7 @@ export interface IscheduleRoomData {
   id: string;
   room_id: string;
   date: string;
+  schoolClass: string;
   teacher_id: string;
   teacher: {
     name: string;

@@ -1,8 +1,11 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from '@/components/ui/use-toast';
+import { getScheduleByRoom } from '@/http/get.scheduleByRoom';
 import { postSchedule } from '@/http/post.schedule';
+import { IscheduleRoomData } from '@/models/scheduleRoom.interface';
 import dayjs from 'dayjs';
-import { Dispatch, MouseEvent } from 'react';
+import { Dispatch, MouseEvent, useRef } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { SiGoogleclassroom } from 'react-icons/si';
 import roomsId from '../roomsId.json';
@@ -11,6 +14,7 @@ interface ToScheduleProps {
   setActiveAside: Dispatch<boolean>;
   room: string;
   date: { day: Date; hour: string } | null;
+  setSchedule: Dispatch<IscheduleRoomData[]>;
 }
 
 export const convertHourStringToNumber = (hour: string) => {
@@ -21,9 +25,26 @@ export const convertHourStringToNumber = (hour: string) => {
   };
 };
 
-export function ToSchedule({ setActiveAside, date, room }: ToScheduleProps) {
+export function ToSchedule({
+  setActiveAside,
+  setSchedule,
+  date,
+  room,
+}: ToScheduleProps) {
+  const classRef = useRef<HTMLInputElement | null>(null);
   const handleToSchedule = async (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    const schoolClass = classRef.current?.value;
+
+    if (!schoolClass) {
+      toast({
+        title: 'Turma inválida',
+        description: 'Insira uma turma válida por exemplo: 1-A',
+      });
+
+      return;
+    }
+
     const { hour, minute } = convertHourStringToNumber(date?.hour || '');
     const dateToSchedule = dayjs(date?.day)
       .hour(hour)
@@ -35,12 +56,22 @@ export function ToSchedule({ setActiveAside, date, room }: ToScheduleProps) {
 
     const roomId = roomsId[room as keyof typeof roomsId] || '';
 
-    const item = await postSchedule({
+    await postSchedule({
       date: dateToSchedule,
       roomId,
+      schoolClass,
     });
 
-    console.log(item);
+    toast({
+      title: `${room} reservado com sucesso!`,
+      description: `Turma: ${schoolClass}`,
+    });
+
+    const currentSchedule = await getScheduleByRoom(roomId);
+
+    if (!currentSchedule) return;
+
+    setSchedule(currentSchedule);
   };
 
   return (
@@ -69,7 +100,7 @@ export function ToSchedule({ setActiveAside, date, room }: ToScheduleProps) {
             <p className="text-medium">Horário</p>
             <Input disabled placeholder={`Horário ${date?.hour}`} />
             <p className="text-medium">Qual a turma?</p>
-            <Input />
+            <Input ref={classRef} />
             <Button onClick={handleToSchedule}>Agendar</Button>
           </form>
         </aside>

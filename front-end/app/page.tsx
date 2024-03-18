@@ -10,7 +10,7 @@ import { getScheduleByRoom } from '../http/get.scheduleByRoom';
 import { getTeacher } from '../http/get.teacher';
 import { Header } from './components/Header';
 import { Room } from './components/Room';
-import { Dates } from './components/Schedule';
+import { ScheduleDates } from './components/ScheduleDates';
 import { Shifts } from './components/Shifts';
 import { ToSchedule } from './components/ToSchedule';
 import roomsId from './roomsId.json';
@@ -89,15 +89,23 @@ export default function MainPage() {
       <Room room={room} setRoom={setRoom} />
       <Shifts setShift={setShift} shift={shift} />
       {schedule ? (
-        <Dates
+        <ScheduleDates
           setActiveAside={setActiveAside}
           setDate={setDate}
           shift={shift}
           schedule={schedule}
+          admin={teacher?.role === 'admin'}
+          room={room}
+          fetchSchedule={fetchSchedule}
         />
       ) : null}
       {activeAside ? (
-        <ToSchedule setActiveAside={setActiveAside} date={date} room={room} />
+        <ToSchedule
+          setActiveAside={setActiveAside}
+          date={date}
+          room={room}
+          setSchedule={setSchedule}
+        />
       ) : null}
     </RouterPrivate>
   );

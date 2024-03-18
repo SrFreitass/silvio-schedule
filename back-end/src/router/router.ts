@@ -56,6 +56,13 @@ export class Router {
       { preHandler: verifyAuth },
       scheduleController.getScheduleByRoom,
     );
+    fastify.delete(
+      `${baseUrl}/schedule/:id`,
+      {
+        preHandler: verifyAuthAdmin,
+      },
+      scheduleController.deleteScheduleDate,
+    );
 
     // Teacher Routers;
     fastify.get(

@@ -74,7 +74,7 @@ export function RouterPrivate({
     <div className="h-screen w-full flex flex-col items-center justify-center">
       <LuCalendarCheck2 size={48} className="animate-pulse" />
       <p className="font-semibold text-center">
-        Conectando a sua conta na agenda Silvio...
+        Conectando a sua conta na agenda...
       </p>
     </div>
   );

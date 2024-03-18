@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { prisma } from "../../prisma";
 
 export class GetScheduleByRoomUseCase {
@@ -5,7 +6,16 @@ export class GetScheduleByRoomUseCase {
     if (!roomId) throw new Error("Params is missing");
     const scheduleByRoom = await prisma.schedule.findMany({
       where: {
-        room_id: roomId,
+        AND: [
+          {
+            room_id: roomId,
+          },
+          {
+            date: {
+              gte: dayjs().day(0).hour(1).toISOString(),
+            },
+          },
+        ],
       },
       include: {
         teacher: {

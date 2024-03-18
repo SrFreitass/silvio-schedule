@@ -5,12 +5,15 @@ export class ToScheduleUseCase {
     date,
     roomId,
     teacherId,
+    schoolClass,
   }: {
     roomId: string;
     teacherId: string;
     date: string;
+    schoolClass: string;
   }) {
-    if (!date || !roomId || !teacherId) throw new Error("Body is missing");
+    if (!date || !roomId || !teacherId || !schoolClass)
+      throw new Error("Body is missing");
 
     const itemsSchedule = await prisma.schedule.findMany({
       where: {
@@ -33,6 +36,7 @@ export class ToScheduleUseCase {
         date,
         teacher_id: teacherId,
         room_id: roomId,
+        class: schoolClass,
       },
     });
 

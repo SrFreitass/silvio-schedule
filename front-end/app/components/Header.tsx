@@ -1,6 +1,7 @@
 import { Switch } from '@/components/ui/switch';
 import Link from 'next/link';
 import { useState } from 'react';
+import { LiaUserShieldSolid } from 'react-icons/lia';
 import { LuCalendarCheck2 } from 'react-icons/lu';
 
 interface HeaderProps {
@@ -33,9 +34,21 @@ export function Header({ userAdmin }: HeaderProps) {
         <Link href={'/'}>Agenda Silvio</Link>
       </h2>
       <nav>
-        <ul className="flex gap-4 max-[560px]:invisible">
+        <ul className="flex gap-4 items-center">
           <li className="hover:text-zinc-500 font-medium">
-            <Link href={'/admin/users'}>{userAdmin && 'Administração'}</Link>
+            <Link href={'/admin/users'} className="flex items-center">
+              {userAdmin && (
+                <>
+                  <LiaUserShieldSolid
+                    className="max-[550px]:visible invisible"
+                    size={24}
+                  />
+                  <span className="max-[550px]:invisible max-[550px]:w-0">
+                    Administração
+                  </span>
+                </>
+              )}
+            </Link>
           </li>
           <li>
             <Switch

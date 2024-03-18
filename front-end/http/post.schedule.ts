@@ -6,14 +6,17 @@ import { axiosInstace } from './axios';
 export const postSchedule = async ({
   date,
   roomId,
+  schoolClass,
 }: {
   date: string;
   roomId: string;
+  schoolClass: string;
 }) => {
   try {
     const item = await axiosInstace.post<IitemSchedule>('/schedule', {
       date,
       roomId,
+      schoolClass,
     });
 
     return item.data.data;
@@ -25,7 +28,7 @@ export const postSchedule = async ({
 
     if (messageError === 'jwt expired') {
       await newTokensProvider();
-      await postSchedule({ date, roomId });
+      await postSchedule({ date, roomId, schoolClass });
     }
   }
 };
