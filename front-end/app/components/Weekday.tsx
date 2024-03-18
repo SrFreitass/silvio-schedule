@@ -1,6 +1,8 @@
-export function Weekday({ day }: { day: Date }) {
+export function Weekday({ day, index }: { day: Date; index: number }) {
   return (
-    <div className="border-b text-center w-row py-2">
+    <div
+      className={`border-b text-center ${index < 4 ? 'w-row' : 'w-row-last-weekday'} py-2`}
+    >
       <p>
         {day.toLocaleDateString('pt-BR', {
           weekday: 'short',

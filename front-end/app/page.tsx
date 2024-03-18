@@ -22,9 +22,6 @@ const weekdayoff = {
 export type shift = 'morning' | 'aftermoon' | 'night';
 
 export default function MainPage() {
-  const [theme, setTheme] = useState(
-    localStorage.getItem('theme') === 'dark' ? 'dark' : 'light',
-  );
   const [renderized, setRenderized] = useState<boolean>(false);
   const [activeAside, setActiveAside] = useState(false);
   const [shift, setShift] = useState<shift>('morning');

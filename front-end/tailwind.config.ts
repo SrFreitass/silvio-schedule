@@ -60,7 +60,9 @@ const config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       width: {
-        row: 'calc(100% + 127px)',
+        row: 'calc(100% + 7.9375rem)',
+        'row-last': 'calc(100% + 4.0625rem)',
+        'row-last-weekday': 'calc(100% + 2.5rem)',
       },
 
       height: {

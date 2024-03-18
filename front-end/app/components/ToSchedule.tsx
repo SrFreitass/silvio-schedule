@@ -54,7 +54,16 @@ export function ToSchedule({
       .subtract(3, 'hours')
       .toISOString();
 
-    const roomId = roomsId[room as keyof typeof roomsId] || '';
+    const roomId = roomsId[room as keyof typeof roomsId];
+
+    if (!roomId) {
+      toast({
+        title: 'Houve algum erro.',
+        description: 'Não se preocupe foi um erro interno.',
+      });
+
+      return;
+    }
 
     await postSchedule({
       date: dateToSchedule,
@@ -77,6 +86,10 @@ export function ToSchedule({
   return (
     <div className="fixed h-screen w-screen bg-back top-0 right-0 left-0">
       <div className="w-full h-full flex justify-end">
+        <div
+          className="w-full h-full max-sm:w-0 max-sm:h-0"
+          onClick={() => setActiveAside(false)}
+        ></div>
         <aside
           className={`
           min-w-[30rem] w-1/3 h-full max-sm:min-w-full p-10

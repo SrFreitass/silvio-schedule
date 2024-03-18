@@ -102,7 +102,7 @@ export function ScheduleDates({
             key={index}
             className={`flex flex-col items-center p-4 border-l font-medium ${index === 4 && 'border-r'}`}
           >
-            <Weekday day={day} />
+            <Weekday day={day} index={index} />
             <div className="mt-6 flex flex-row-reverse gap-8 ">
               <div className="flex flex-col gap-4">
                 {shiftHours[shift].map((hour, indexHour) => {
@@ -138,7 +138,9 @@ export function ScheduleDates({
                           </div>
                         )}
                       </div>
-                      <span className="w-row h-[0.5px] border"></span>
+                      <span
+                        className={`${index < 4 ? 'w-row' : 'w-row-last'} h-[0.5px] border`}
+                      ></span>
                     </div>
                   );
                 })}

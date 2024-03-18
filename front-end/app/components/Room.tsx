@@ -26,7 +26,7 @@ export function Room({ setRoom, room }: RoomProps) {
       <h2 className="text-lg font-semibold mb-1">Sala</h2>
       <Select>
         <SelectTrigger onFocus={handleRoom}>
-          <SelectValue placeholder="Sala de artes" />
+          <SelectValue placeholder="Sala de Artes" />
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="1">Sala de Artes</SelectItem>
