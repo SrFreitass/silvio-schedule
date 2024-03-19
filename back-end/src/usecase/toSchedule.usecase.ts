@@ -31,50 +31,54 @@ export class ToScheduleUseCase {
     if (itemsSchedule.length > 0)
       throw new Error("This room is already reserved at this time");
 
-    const item = await prisma.schedule.create({
-      data: {
-        date,
-        teacher_id: teacherId,
-        room_id: roomId,
-        class: schoolClass,
-      },
-    });
-
-    const items = await prisma.schedule.findMany({
-      orderBy: {
-        version: "asc",
-      },
-      where: {
-        AND: [
-          {
-            room_id: item.room_id,
-          },
-          {
-            date: item.date,
-          },
-        ],
-      },
-    });
-
-    if (items?.length > 1) {
-      items.forEach(async (item, index) => {
-        try {
-          if (index < 1) return;
-          const itemDeleted = await prisma.schedule.delete({
-            where: {
-              id: item.id,
-            },
-          });
-
-          if (itemDeleted.id === item.id) {
-            throw new Error("This room is already reserved at this time");
-          }
-        } catch (error) {
-          console.error(error);
-        }
+    const itemSchedule = await prisma.$transaction(async () => {
+      const item = await prisma.schedule.create({
+        data: {
+          date,
+          teacher_id: teacherId,
+          room_id: roomId,
+          class: schoolClass,
+        },
       });
-    }
 
-    return item;
+      const items = await prisma.schedule.findMany({
+        orderBy: {
+          version: "asc",
+        },
+        where: {
+          AND: [
+            {
+              room_id: item.room_id,
+            },
+            {
+              date: item.date,
+            },
+          ],
+        },
+      });
+
+      if (items?.length > 1) {
+        items.forEach(async (item, index) => {
+          try {
+            if (index < 1) return;
+            const itemDeleted = await prisma.schedule.delete({
+              where: {
+                id: item.id,
+              },
+            });
+
+            if (itemDeleted.id === item.id) {
+              throw new Error("This room is already reserved at this time");
+            }
+          } catch (error) {
+            console.error(error);
+          }
+        });
+      }
+
+      return item;
+    });
+
+    return itemSchedule;
   }
 }

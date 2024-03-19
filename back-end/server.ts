@@ -2,7 +2,7 @@ import cors from "@fastify/cors";
 import fastify from "fastify";
 import { Router } from "./src/router/router";
 
-const app = fastify();
+export const app = fastify();
 
 const router = new Router(app, "/api/v1");
 
