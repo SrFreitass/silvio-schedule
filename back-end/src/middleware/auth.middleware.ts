@@ -17,8 +17,6 @@ export async function verifyAuth(
   verify(token, TOKEN_SECRET);
   const { userId } = decode(token) as { userId: string };
 
-  console.log(userId, "USER_ID");
-
   const user = await prisma.users.findUnique({
     where: {
       id: userId || "",

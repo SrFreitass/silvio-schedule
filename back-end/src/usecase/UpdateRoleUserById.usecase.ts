@@ -20,8 +20,6 @@ export class UpdateRoleUserUseCase {
       },
     });
 
-    console.log(user);
-
     return user;
   }
 }

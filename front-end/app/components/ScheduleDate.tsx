@@ -21,7 +21,7 @@ interface ScheduleDate {
   reservedProps?: {
     id: string;
     teacher: string;
-    schoolClass: string;
+    class: string;
     date: string;
     lessonNumber: number;
   };
@@ -93,7 +93,7 @@ export function ScheduleDate({
               {date} - {reservedProps?.lessonNumber}° Aula
             </p>
             <p className="font-medium">Professor: {reservedProps?.teacher}</p>
-            <p className="font-medium">Turma: {reservedProps?.schoolClass}</p>
+            <p className="font-medium">Turma: {reservedProps?.class}</p>
           </>
         ) : (
           <div>
@@ -101,11 +101,14 @@ export function ScheduleDate({
               Tem certeza de sua ação?
             </h2>
             <div className="flex justify-center gap-4 mt-8">
-              <Button className="w-full" onClick={handleDeleteSchedule}>
+              <Button
+                className="w-full max-w-40"
+                onClick={handleDeleteSchedule}
+              >
                 Sim
               </Button>
               <DialogClose className="w-full">
-                <Button>Não</Button>
+                <Button className="w-full max-w-40">Não</Button>
               </DialogClose>
             </div>
           </div>

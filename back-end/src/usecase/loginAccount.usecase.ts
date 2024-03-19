@@ -27,8 +27,6 @@ export class LoginAccountUseCase {
 
     if (!user.refreshToken?.id) throw new Error("Unexpected Error");
 
-    console.log(user.refreshToken.id);
-
     const refreshTokenUseCase = new RefreshTokenUseCase();
     const newTokens = await refreshTokenUseCase.execute({
       refreshToken: user.refreshToken.id,

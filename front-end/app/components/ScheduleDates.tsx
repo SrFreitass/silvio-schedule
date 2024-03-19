@@ -76,7 +76,7 @@ export function ScheduleDates({
           <ScheduleDate
             reservedProps={{
               date: item.date,
-              schoolClass: item.schoolClass,
+              class: item.class,
               teacher: item.teacher.name,
               lessonNumber: indexHour + 1,
               id: item.id,
