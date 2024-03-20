@@ -1,4 +1,11 @@
-import { Dispatch } from 'react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Dispatch, FocusEvent } from 'react';
 import { shift } from '../page';
 
 interface ShiftsProps {
@@ -6,28 +13,28 @@ interface ShiftsProps {
   setShift: Dispatch<shift>;
 }
 
-const shifts = {
-  morning: 'MATUTINO',
-  aftermoon: 'VESPERTINO',
-  night: 'NOTURNO',
-};
 export function Shifts({ setShift, shift: currentShift }: ShiftsProps) {
+  const handleShift = (e: FocusEvent<HTMLButtonElement>) => {
+    const selectShift = e?.target?.querySelector('span');
+    if (selectShift) {
+      setShift(selectShift.innerText as shift);
+    }
+  };
+
   return (
-    <div className="mt-8">
-      <div className="flex gap-8 max-sm:justify-between max-[485px]:flex-col font-semibold">
-        {['morning', 'aftermoon', 'night'].map((shift, index) => {
-          return (
-            <span
-              key={index}
-              className={`flex items-center gap-2 cursor-pointer border p-2 rounded-md rounded-b-none 
-          ${currentShift === shift && 'bg-blue-100 dark:text-black'}
-          `}
-              onClick={() => setShift(shift as shift)}
-            >
-              {shifts[shift as shift]}
-            </span>
-          );
-        })}
+    <div className="mb-8 mt-4">
+      <div className="flex flex-col gap-2">
+        <h2 className="text-lg font-semibold mb-1">Turno</h2>
+        <Select>
+          <SelectTrigger onFocus={handleShift}>
+            <SelectValue placeholder="Matutino" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="1">Matutino</SelectItem>
+            <SelectItem value="2">Vespertino</SelectItem>
+            <SelectItem value="3">Noturno</SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     </div>
   );

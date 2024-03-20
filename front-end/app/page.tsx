@@ -19,12 +19,12 @@ const weekdayoff = {
   domingo: true,
 };
 
-export type shift = 'morning' | 'aftermoon' | 'night';
+export type shift = 'Matutino' | 'Vespertino' | 'Noturno';
 
 export default function MainPage() {
   const [renderized, setRenderized] = useState<boolean>(false);
   const [activeAside, setActiveAside] = useState(false);
-  const [shift, setShift] = useState<shift>('morning');
+  const [shift, setShift] = useState<shift>('Matutino');
   const [date, setDate] = useState<{ day: Date; hour: string } | null>(null);
   const [room, setRoom] = useState<string>('Sala de Artes');
   const [schedule, setSchedule] = useState<IscheduleRoomData[] | null>(null);
