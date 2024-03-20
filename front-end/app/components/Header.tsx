@@ -31,7 +31,9 @@ export function Header({ userAdmin }: HeaderProps) {
     <header className="py-4 flex items-center justify-between">
       <h2 className="text-xl font-semibold flex items-center gap-2 max-sm:text-lg">
         <LuCalendarCheck2 size={24} />
-        <Link href={'/'}>Agenda Silvio</Link>
+        <Link href={'/'} className="none">
+          Agenda Silvio
+        </Link>
       </h2>
       <nav>
         <ul className="flex gap-4 items-center">
@@ -43,9 +45,7 @@ export function Header({ userAdmin }: HeaderProps) {
                     className="max-[550px]:visible invisible"
                     size={24}
                   />
-                  <span className="max-[550px]:invisible max-[550px]:w-0">
-                    Administração
-                  </span>
+                  <span className="none">Administração</span>
                 </>
               )}
             </Link>

@@ -1,6 +1,6 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { DeleteUserByIdUseCase } from "../usecase/DeleteUserById.usecase";
 import { GetUsersStrangersUseCase } from "../usecase/GetUsersStrangers.usecase";
+import { DeleteUserByIdUseCase } from "../usecase/DeleteUserById.usecase";
 import { UpdateRoleUserUseCase } from "../usecase/UpdateRoleUserById.usecase";
 
 class UsersController {

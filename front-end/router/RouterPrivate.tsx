@@ -57,7 +57,7 @@ export function RouterPrivate({
 
   if (authenticated === 'APPROVAL_REQUEST') {
     return (
-      <div className="h-screen flex flex-col justify-center items-center">
+      <div className="h-[90vh] flex flex-col justify-center items-center">
         <LuCalendarCheck2 size={48} className="animate-pulse" />
         <p className="text-lg font-semibold text-center">
           Aguarde um momento, estamos validando sua conta! Isso pode demorar.
@@ -71,7 +71,7 @@ export function RouterPrivate({
   }
 
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center">
+    <div className="h-[screen] w-full flex flex-col items-center justify-center">
       <LuCalendarCheck2 size={48} className="animate-pulse" />
       <p className="font-semibold text-center">
         Conectando a sua conta na agenda...

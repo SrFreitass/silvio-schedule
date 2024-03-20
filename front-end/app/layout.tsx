@@ -23,8 +23,10 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${poppins.className} dark:bg-zinc-900`}>
-        <div className="max-w-[1600px] p-4 m-auto">{children}</div>
+      <body className={`${poppins.className} dark:bg-zinc-900 min-h-screen`}>
+        <div className="max-w-[1600px] p-4 max-[1600px]:p-6 m-auto">
+          {children}
+        </div>
         <Toaster />
       </body>
     </html>

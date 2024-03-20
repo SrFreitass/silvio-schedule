@@ -1,7 +1,7 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { DeleteScheduleDateUseCase } from "../usecase/DeleteScheduleDate.usecase";
 import { GetScheduleByRoomUseCase } from "../usecase/getScheduleByRoom.usecase";
 import { ToScheduleUseCase } from "../usecase/toSchedule.usecase";
+import { DeleteScheduleDateUseCase } from "../usecase/DeleteScheduleDate.usecase";
 
 class ScheduleController {
   async deleteScheduleDate(req: FastifyRequest, reply: FastifyReply) {
