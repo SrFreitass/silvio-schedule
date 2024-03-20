@@ -66,13 +66,15 @@
   }
 }
 
-
-.none {
-    @media(max-width: 550px) {
-      display: none;
-    }
+.center {
+  height: 90vh;
 }
- 
+
+@media (max-width: 560px) {
+  .none {
+    display: none
+  }
+}
 
 @layer base {
   * {
