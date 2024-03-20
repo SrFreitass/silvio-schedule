@@ -1,5 +1,4 @@
 import { Dispatch } from 'react';
-import { FiSun } from 'react-icons/fi';
 import { shift } from '../page';
 
 interface ShiftsProps {
@@ -25,7 +24,6 @@ export function Shifts({ setShift, shift: currentShift }: ShiftsProps) {
           `}
               onClick={() => setShift(shift as shift)}
             >
-              <FiSun />
               {shifts[shift as shift]}
             </span>
           );
