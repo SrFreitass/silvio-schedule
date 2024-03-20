@@ -30,9 +30,9 @@ export function Header({ userAdmin }: HeaderProps) {
   return (
     <header className="py-4 flex items-center justify-between">
       <h2 className="text-xl font-semibold flex items-center gap-2 max-sm:text-lg">
-        <LuCalendarCheck2 size={24} />
-        <Link href={'/'} className="none">
-          Agenda Silvio
+        <Link href={'/'} className="flex gap-2">
+          <LuCalendarCheck2 size={24} />
+          <span className="none">Agenda Silvio</span>
         </Link>
       </h2>
       <nav>
