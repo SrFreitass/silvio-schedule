@@ -10,7 +10,7 @@ export function RouterPrivateAdmin({
   setRenderized,
 }: {
   children: React.ReactNode;
-} & { setRenderized: Dispatch<boolean> }) {
+} & { setRenderized?: Dispatch<boolean> }) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const router = useRouter();
 
@@ -20,7 +20,9 @@ export function RouterPrivateAdmin({
         const auth = await getVerifyAuthAdmin();
         if (auth.message === 'User is admin') {
           setIsAdmin(true);
-          setRenderized(true);
+          if (setRenderized) {
+            setRenderized(true);
+          }
         }
       } catch (error) {
         console.error(error);

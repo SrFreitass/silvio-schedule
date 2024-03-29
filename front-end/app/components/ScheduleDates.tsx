@@ -1,7 +1,7 @@
 import { IscheduleRoomData } from '@/models/scheduleRoom.interface';
 import { week } from '@/providers/getWeek';
 import dayjs from 'dayjs';
-import { Dispatch } from 'react';
+import { Dispatch, useEffect, useState } from 'react';
 import { ScrollContainer } from 'react-indiana-drag-scroll';
 import 'react-indiana-drag-scroll/dist/style.css';
 import { shift } from '../page';
@@ -48,6 +48,16 @@ export function ScheduleDates({
   room,
   fetchSchedule,
 }: DatesProps) {
+  const [currentWeek, setCurrentWeek] = useState<Date[]>();
+
+  useEffect(() => {
+    const fetchWeek = async () => {
+      const current = await week();
+      setCurrentWeek(current);
+    };
+    fetchWeek();
+  }, []);
+
   const handleSchedule = ({ day, hour }: { hour: string; day: Date }) => {
     setDate({
       day,
@@ -96,7 +106,7 @@ export function ScheduleDates({
 
   return (
     <ScrollContainer className="flex gap-[2.6rem] max-h-[41rem] border-t overflow-scroll">
-      {week.map((day, index) => {
+      {currentWeek?.map((day, index) => {
         return (
           <div
             key={index}

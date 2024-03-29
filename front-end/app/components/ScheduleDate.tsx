@@ -44,6 +44,9 @@ export function ScheduleDate({
         .format('DD/MM/YYYY dddd, HH:mm')
     : null;
 
+  const weekday = date?.split(' ')[1].split(',')[0];
+
+  console.log(date);
   const handleDeleteSchedule = async () => {
     if (!reservedProps?.id || !fetchSchedule) return;
 
@@ -68,7 +71,7 @@ export function ScheduleDate({
       </div>
       {reservedProps?.date && admin && (
         <FaTrashAlt
-          className="text-red-500 relative left-[30%]"
+          className={`text-red-500 relative ${weekday === 'sexta-feira' ? 'left-4' : 'left-10'}`}
           onClick={() => setIsDialogProps(false)}
         />
       )}
@@ -82,7 +85,7 @@ export function ScheduleDate({
       ) : (
         content
       )}
-      <DialogContent className={isDialogProps ? '' : 'w-96'}>
+      <DialogContent className="max-w-96">
         {isDialogProps ? (
           <>
             <h2 className="font-semibold flex items-center gap-2">

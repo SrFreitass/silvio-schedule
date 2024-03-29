@@ -1,4 +1,5 @@
 import cors from "@fastify/cors";
+import "dotenv/config";
 import fastify from "fastify";
 import { Router } from "./src/router/router";
 
@@ -12,6 +13,6 @@ app.register(cors, {
 });
 
 app.listen({
-  host: '0.0.0.0',
-  port: process.env.PORT ? Number(process.env.PORT) : 3000,
+  host: "0.0.0.0",
+  port: process.env.PORT ? Number(process.env.PORT) : 3001,
 });

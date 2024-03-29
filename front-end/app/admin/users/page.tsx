@@ -3,7 +3,6 @@
 import { Header } from '@/app/components/Header';
 import { getUsersStrangers } from '@/http/get.usersStrangers';
 import { ITeacherData } from '@/models/teacher.interface';
-import { RouterPrivateAdmin } from '@/router/RouterPrivateAdmin';
 import { useEffect, useState } from 'react';
 import { FaUserShield } from 'react-icons/fa6';
 import { User } from './components/User';
@@ -25,7 +24,7 @@ export default function UsersPage() {
   }, [renderized]);
 
   return (
-    <RouterPrivateAdmin setRenderized={setRenderized}>
+    <>
       <Header userAdmin={true} />
       <div className="mt-12">
         <h2 className="text-2xl max-sm:text-xl font-semibold flex max-sm:flex-col max-sm:items-start items-center gap-2">
@@ -40,6 +39,6 @@ export default function UsersPage() {
           })}
         </div>
       </div>
-    </RouterPrivateAdmin>
+    </>
   );
 }

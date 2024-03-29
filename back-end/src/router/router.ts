@@ -11,6 +11,13 @@ export class Router {
     private readonly fastify: FastifyInstance,
     private readonly baseUrl: string,
   ) {
+    fastify.get(`${baseUrl}/day`, () => {
+      const UTC = process.env.UTC;
+      if (UTC && Number(UTC)) {
+        return new Date().setUTCHours(Number(UTC));
+      }
+      return new Date();
+    });
     // Verify Auth Routers;
     fastify.get(
       `${baseUrl}/autheticated`,

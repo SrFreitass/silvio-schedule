@@ -38,7 +38,7 @@ export function Header({ userAdmin }: HeaderProps) {
       <nav>
         <ul className="flex gap-4 items-center">
           <li className="hover:text-zinc-500 font-medium">
-            <Link href={'/admin/users'} className="flex items-center">
+            <Link href={'/admin'} className="flex items-center">
               {userAdmin && (
                 <>
                   <LiaUserShieldSolid
