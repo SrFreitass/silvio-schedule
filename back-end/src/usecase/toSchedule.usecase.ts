@@ -12,6 +12,8 @@ export class ToScheduleUseCase {
     date: string;
     schoolClass: string;
   }) {
+    console.log(date, roomId, teacherId, schoolClass);
+
     if (!date || !roomId || !teacherId || !schoolClass)
       throw new Error("Body is missing");
 

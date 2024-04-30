@@ -4,6 +4,7 @@ import { toast } from '@/components/ui/use-toast';
 import { getScheduleByRoom } from '@/http/get.scheduleByRoom';
 import { postSchedule } from '@/http/post.schedule';
 import { IscheduleRoomData } from '@/models/scheduleRoom.interface';
+import { tokens } from '@/providers/TokensSession';
 import dayjs from 'dayjs';
 import { Dispatch, MouseEvent, useRef } from 'react';
 import { IoClose } from 'react-icons/io5';
@@ -69,6 +70,7 @@ export function ToSchedule({
       date: dateToSchedule,
       roomId,
       schoolClass,
+      teacherId: tokens.userId,
     });
 
     toast({
