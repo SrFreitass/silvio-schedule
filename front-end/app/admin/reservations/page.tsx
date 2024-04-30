@@ -4,10 +4,10 @@ import { Header } from '@/app/components/Header';
 import { Room } from '@/app/components/Room';
 import { Button } from '@/components/ui/button';
 import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogTrigger,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogTrigger,
 } from '@/components/ui/dialog';
 import { deleteScheduleDate } from '@/http/delete.scheduleDate';
 import { getScheduleByRoom } from '@/http/get.scheduleByRoom';
@@ -55,7 +55,14 @@ export default function ReservartionsPage() {
         <Room room={room} setRoom={setRoom} />
         <div className="flex flex-wrap gap-8 max-h-[60vh] overflow-auto mt-8">
           {reservation?.map(
-            ({ class: classRoom, date, id, room_id, teacher, teacher_id }) => {
+            ({
+              class: classRoom,
+              date,
+              id,
+              room_id: roomId,
+              teacher,
+              teacher_id: teacherId,
+            }) => {
               return (
                 <Dialog key={id}>
                   <div className="flex justify-between items-center border rounded-md p-3 min-w-52 h-44 max-w-52">

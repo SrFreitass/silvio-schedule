@@ -29,7 +29,7 @@ export class RegisterAccountUseCase {
         email,
         name,
         password: passwordHashed,
-        role: "teacher",
+        role: "stranger",
       },
     });
 

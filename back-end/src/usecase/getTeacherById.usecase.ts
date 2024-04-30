@@ -13,7 +13,6 @@ export class GetTeacherByIdUseCase {
         name: true,
         email: true,
         role: true,
-        Schedule: true,
       },
     });
 
