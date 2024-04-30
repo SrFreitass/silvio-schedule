@@ -8,12 +8,12 @@ import { tokens } from '@/providers/TokensSession';
 import { useEffect, useState } from 'react';
 import { getScheduleByRoom } from '../http/get.scheduleByRoom';
 import { getTeacher } from '../http/get.teacher';
+import { Footer } from './components/Footer';
 import { Header } from './components/Header';
 import { Room } from './components/Room';
 import { ScheduleDates } from './components/ScheduleDates';
 import { Shifts } from './components/Shifts';
 import { ToSchedule } from './components/ToSchedule';
-import { Footer } from './components/footer';
 import roomsId from './roomsId.json';
 const weekdayoff = {
   sabádo: true,
