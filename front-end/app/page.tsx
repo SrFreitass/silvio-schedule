@@ -13,6 +13,7 @@ import { Room } from './components/Room';
 import { ScheduleDates } from './components/ScheduleDates';
 import { Shifts } from './components/Shifts';
 import { ToSchedule } from './components/ToSchedule';
+import { Footer } from './components/footer';
 import roomsId from './roomsId.json';
 const weekdayoff = {
   sabádo: true,
@@ -104,6 +105,7 @@ export default function MainPage() {
           setSchedule={setSchedule}
         />
       ) : null}
+      <Footer />
     </RouterPrivate>
   );
 }
