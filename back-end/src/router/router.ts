@@ -13,7 +13,6 @@ export class Router {
   ) {
     fastify.get(`${baseUrl}/day`, () => {
       const UTC = process.env.UTC || -3;
-
       if (UTC && Number(UTC)) {
         return new Date().setUTCHours(Number(UTC));
       }
@@ -54,7 +53,13 @@ export class Router {
     fastify.post(`${baseUrl}/auth/login`, authController.login);
 
     // Schedule Routers;
-    fastify.post(`${baseUrl}/schedule`, scheduleController.toSchedule);
+    fastify.post(
+      `${baseUrl}/schedule`,
+      {
+        preHandler: verifyAuth,
+      },
+      scheduleController.toSchedule,
+    );
     fastify.get(
       `${baseUrl}/schedule/:roomId`,
       { preHandler: verifyAuth },

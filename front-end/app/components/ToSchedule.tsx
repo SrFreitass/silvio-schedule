@@ -66,11 +66,12 @@ export function ToSchedule({
       return;
     }
 
+    console.log(tokens.userId);
+
     await postSchedule({
       date: dateToSchedule,
       roomId,
       schoolClass,
-      teacherId: tokens.userId,
     });
 
     toast({

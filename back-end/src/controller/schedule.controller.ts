@@ -26,11 +26,13 @@ class ScheduleController {
   async toSchedule(req: FastifyRequest, reply: FastifyReply) {
     try {
       const userId = req.headers.userId as string;
+
       const body = req.body as {
         roomId: string;
         date: string;
         schoolClass: string;
       };
+
       const useCase = new ToScheduleUseCase();
       const output = await useCase.execute({ ...body, teacherId: userId });
       return {
