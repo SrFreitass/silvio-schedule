@@ -4,6 +4,7 @@ import { IscheduleRoomData } from '@/models/scheduleRoom.interface';
 import { ITeacherData } from '@/models/teacher.interface';
 import { RouterPrivate } from '@/router/RouterPrivate';
 
+import { getRooms } from '@/http/get.rooms';
 import { tokens } from '@/providers/TokensSession';
 import { useEffect, useState } from 'react';
 import { getScheduleByRoom } from '../http/get.scheduleByRoom';
@@ -14,7 +15,6 @@ import { Room } from './components/Room';
 import { ScheduleDates } from './components/ScheduleDates';
 import { Shifts } from './components/Shifts';
 import { ToSchedule } from './components/ToSchedule';
-import roomsId from './roomsId.json';
 const weekdayoff = {
   sabádo: true,
   domingo: true,
@@ -32,13 +32,31 @@ export default function MainPage() {
   const [teacher, setTeacher] = useState<
     (ITeacherData & { Schedule: IscheduleRoomData }) | null
   >(null);
+  let [rooms, setRooms] = useState<Record<string, string>>();
+
   const newDate = new Date().toLocaleDateString('pt-BR', {
     dateStyle: 'full',
   });
   const userRole = teacher?.role;
 
+  const fetchRooms = async () => {
+    const rooms = await getRooms();
+    const roomsObject: Record<string, string> = {};
+
+    rooms.forEach((room: { name: string; id: string }) => {
+      roomsObject[room.name as string] = room.id;
+    });
+
+    return roomsObject;
+  };
+
   const fetchSchedule = async () => {
-    const currentRoom = roomsId[room as keyof typeof roomsId];
+    if (!rooms) {
+      rooms = await fetchRooms();
+      setRooms(rooms);
+    }
+
+    const currentRoom = rooms[room];
 
     if (!currentRoom) return;
 
@@ -97,11 +115,12 @@ export default function MainPage() {
           fetchSchedule={fetchSchedule}
         />
       ) : null}
-      {activeAside ? (
+      {activeAside && rooms ? (
         <ToSchedule
           setActiveAside={setActiveAside}
           date={date}
           room={room}
+          rooms={rooms}
           setSchedule={setSchedule}
         />
       ) : null}

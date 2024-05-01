@@ -9,11 +9,11 @@ import dayjs from 'dayjs';
 import { Dispatch, MouseEvent, useRef } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { SiGoogleclassroom } from 'react-icons/si';
-import roomsId from '../roomsId.json';
 
 interface ToScheduleProps {
   setActiveAside: Dispatch<boolean>;
   room: string;
+  rooms: Record<string, string>;
   date: { day: Date; hour: string } | null;
   setSchedule: Dispatch<IscheduleRoomData[]>;
 }
@@ -31,6 +31,7 @@ export function ToSchedule({
   setSchedule,
   date,
   room,
+  rooms,
 }: ToScheduleProps) {
   const classRef = useRef<HTMLInputElement | null>(null);
   const handleToSchedule = async (e: MouseEvent<HTMLButtonElement>) => {
@@ -55,7 +56,7 @@ export function ToSchedule({
       .subtract(3, 'hours')
       .toISOString();
 
-    const roomId = roomsId[room as keyof typeof roomsId];
+    const roomId = rooms[room];
 
     if (!roomId) {
       toast({

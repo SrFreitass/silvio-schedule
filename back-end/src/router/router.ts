@@ -1,5 +1,6 @@
 import { FastifyInstance } from "fastify";
 import authController from "../controller/auth.controller";
+import roomController from "../controller/room.controller";
 import scheduleController from "../controller/schedule.controller";
 import teacherController from "../controller/teacher.controller";
 import usersController from "../controller/users.controller";
@@ -51,6 +52,14 @@ export class Router {
     fastify.post(`${baseUrl}/auth/refresh/token`, authController.refreshToken);
     fastify.post(`${baseUrl}/auth/register`, authController.register);
     fastify.post(`${baseUrl}/auth/login`, authController.login);
+
+    // Rooms
+
+    fastify.get(
+      `${baseUrl}/rooms`,
+      { preHandler: verifyAuth },
+      roomController.getRooms,
+    );
 
     // Schedule Routers;
     fastify.post(

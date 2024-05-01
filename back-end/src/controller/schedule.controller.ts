@@ -36,8 +36,8 @@ class ScheduleController {
       const useCase = new ToScheduleUseCase();
       const output = await useCase.execute({ ...body, teacherId: userId });
       return {
-        statusCode: 200,
-        message: "OK",
+        statusCode: 201,
+        message: "Scheduling",
         data: output,
       };
     } catch (error) {
